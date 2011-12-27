@@ -28,13 +28,13 @@ function countCode(password, key){
 $('body').append(
     '<div id="flower-password-input" style="display: none;">' +
         '<span id="flower-password-close" title="关闭">关闭</span>' +
-        '<h1>花密 Flower Password</h1>' +
+        '<h1>花密 Flower Password <a href="http://kisexu.com/huami/" target="_blank"><img src="' + chrome.extension.getURL('img/goto.png') + '" title="打开花密官网" /></a></h1>' +
         '<label for="flower-password-password">记忆密码</label><input id="flower-password-password" name="flower-password-password" type="password" value="" maxlength="20" accesskey="S" />' +
         '<br>' +
         '<label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" maxlength="20" />' +
         '<br>' +
         '<input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入分区代号</label>' +
-        '<p>· 记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。<br>· 区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。<br>· 快捷键：按Alt+S可聚焦到记忆密码输入框；按Enter键或Esc键关闭本窗口。<br>· 花密官网地址：<a href="http://kisexu.com/huami/" target="_blank">http://kisexu.com/huami/</a></p>' +
+        '<p>· 记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。<br>· 区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。<br>· 快捷键：Alt+S聚焦到记忆密码输入框；Enter或Esc关闭本窗口。</p>' +
     '</div>'
 );
 $('head').append(
@@ -43,7 +43,7 @@ $('head').append(
     '</style>'
 );
 
-var insideBox = function(e) {
+function insideBox(e) {
     return e.parents('#flower-password-input').size() > 0;
 };
 
@@ -72,7 +72,7 @@ $(document).on('focus', 'input:not(:password)', function() {
     $('#flower-password-input').hide();
 });
 
-var onChange = function() {
+function onChange() {
     var password = $("#flower-password-password").val();
     var key = $("#flower-password-key").val();
     var result = countCode(password, key);

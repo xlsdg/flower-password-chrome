@@ -1,17 +1,17 @@
-var options = {};
+var globalOptions = {};
 
 function initOptions(callback) {
     chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
-        options = response;
+        globalOptions = response;
         callback();
     });
 }
 
 function isFillKeyWithDomain() {
-    return options.fillKeyWithDomain;
+    return globalOptions.fillKeyWithDomain;
 }
 
 function setFillKeyWithDomain(value) {
-    options.fillKeyWithDomain = value;
-    chrome.extension.sendRequest({action: 'setOptions', options: options});
+    globalOptions.fillKeyWithDomain = value;
+    chrome.extension.sendRequest({action: 'setOption', name: 'fillKeyWithDomain', value: value});
 }
