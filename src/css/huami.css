@@ -29,7 +29,7 @@
   margin: 0 0 5px !important;
 }
 
-#flower-password-password, #flower-password-key {
+#flower-password-input input[type="text"], #flower-password-input input[type="password"] {
   padding: 5px !important;
   margin: 5px 10px !important;
   border: 1px solid #999 !important;
@@ -40,12 +40,23 @@
   width: 160px;
 }
 
-#flower-password-fill-key {
+#flower-password-input input[type="checkbox"] {
   margin: 10px 10px 5px !important;
   border: 1px solid #999 !important;
   border-radius: 3px;
   vertical-align: middle !important;
   display: inline-block;
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+#flower-password-input input[type="checkbox"]:checked::after {
+  display: block;
+  position: relative;
+  top: -3px;
+  left: -5px;
 }
 
 #flower-password-input label {
