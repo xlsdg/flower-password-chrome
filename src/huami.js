@@ -32,8 +32,10 @@ $('body').append(
         '<label for="flower-password-password">记忆密码</label><input id="flower-password-password" name="flower-password-password" type="password" value="" maxlength="20" />' +
         '<br>' +
         '<label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" maxlength="20" />' +
-    '<p>· 记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。<br>· 区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。<br>· 按Enter键或Esc键关闭本窗口。<br>· 花密官网地址：<a href="http://kisexu.com/huami/" target="_blank">http://kisexu.com/huami/</a></p>' +
-'</div>'
+        '<br>' +
+        '<input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入分区代号</label>' +
+        '<p>· 记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。<br>· 区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。<br>· 按Enter键或Esc键关闭本窗口。<br>· 花密官网地址：<a href="http://kisexu.com/huami/" target="_blank">http://kisexu.com/huami/</a></p>' +
+    '</div>'
 );
 
 var insideBox = function(e) {
@@ -45,8 +47,13 @@ $(document).on('focus', 'input:password', function() {
     if (insideBox($(this))) {
         return;
     }
-    if (currentField && currentField.get(0) != this) {
-        $('#flower-password-password, #flower-password-key').val('');
+    if (!currentField || currentField.get(0) != this) {
+        $('#flower-password-password').val('');
+        if (isFillKeyWithDomain()) {
+            $("#flower-password-key").val(getDomain(window.location.hostname));
+        } else {
+            $("#flower-password-key").val('');
+        }
     }
     currentField = $(this);
     var offset = currentField.offset();
@@ -74,6 +81,18 @@ $('#flower-password-password, #flower-password-key').change(onChange).keyup(onCh
         $('#flower-password-input').hide();
     }
 });
+
+initOptions(function() {
+    $('#flower-password-fill-key').prop("checked", isFillKeyWithDomain());
+});
+$('#flower-password-fill-key').change(function(e) {
+    var checked = $(this).prop("checked");
+    setFillKeyWithDomain(checked);
+    if (checked && $("#flower-password-key").val() == '') {
+        $("#flower-password-key").val(getDomain(window.location.hostname));
+    }
+});
+
 $('#flower-password-close').click(function() {
     $('#flower-password-input').hide();
 });
