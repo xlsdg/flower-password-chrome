@@ -1,0 +1,9 @@
+#flower-password-input { font: normal 14px/1.5 Tahoma, Helvetica, Arial, "\5b8b\4f53"; color: #000; text-align: left; width: 250px; padding: 10px; margin: 0; border: 2px solid #168BC3; background: #FFF; z-index: 999999; position: absolute; box-sizing: content-box; }
+#flower-password-input h1 { font: inherit; font-size: 21px; font-weight: bold; color: #168BC3; margin: 0 0 5px; padding: 0; }
+#flower-password-password, #flower-password-key { font: inherit; border: 1px solid #999; border-radius: 3px; font-size: 14px; height: 18px; padding: 5px; margin: 5px 10px; width: 160px; box-sizing: inherit; }
+#flower-password-input label { font: inherit; color: inherit; margin: 0; padding: 0; display: inline; float: none; vertical-align: middle; }
+#flower-password-input p { font: inherit; font-size: 12px; color: #999; margin: 10px 0 0; padding: 0; }
+#flower-password-close { display: block; width: 16px; height: 16px; overflow: hidden; position: absolute; top: -2px; right: -2px; border: 2px solid #168BC3; background: #168BC3; color: #FFF; font: inherit; font-weight: bold; cursor: pointer; margin: 0; padding: 0; }
+#flower-password-close::before { content: "\D7"; display: block; width: 16px; height: 16px; line-height: 16px; text-align: center; position: relative; top: -1px; margin: 0; padding: 0; }
+#flower-password-input a { font: inherit; color: #168BC3; text-decoration: none; background: inherit; }
+#flower-password-input a:hover { font: inherit; color: #FF881C; text-decoration: none; background: inherit; }
