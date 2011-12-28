@@ -13,7 +13,8 @@
       "matches": ["http://*/*", "https://*/*"],
       "css": ["css/huami.css"],
       "js": ["js/jquery.js", "js/md5.js", "js/domain.js", "js/local-options.js", "js/huami.js"],
-      "run_at": "document_end"
+      "run_at": "document_end",
+      "all_frames": true
     }
   ],
   "page_action": {
