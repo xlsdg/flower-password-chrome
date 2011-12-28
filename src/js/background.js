@@ -28,7 +28,6 @@ function forEachTab(callback) {
 }
 
 function hideAllPageActions() {
-    console.log('hide');
     forEachTab(function(tab) {
         chrome.pageAction.hide(tab.id);
     });
@@ -36,9 +35,13 @@ function hideAllPageActions() {
 
 function showAllPageActions() {
     forEachTab(function(tab) {
-        chrome.pageAction.hide(tab.id);
-        chrome.tabs.sendRequest(tab.id, {action: 'requestEnabled'});
+        updatePageAction(tab);
     });
+}
+
+function updatePageAction(tab) {
+    chrome.pageAction.hide(tab.id);
+    chrome.tabs.sendRequest(tab.id, {action: 'requestEnabled'});
 }
 
 function notifyOptionsChanged() {
@@ -78,7 +81,7 @@ function attachListeners() {
     });
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         if (tab.status == 'loading') {
-            chrome.pageAction.hide(tab.id);
+            updatePageAction(tab);
         }
     });
     chrome.pageAction.onClicked.addListener(function(tab) {
