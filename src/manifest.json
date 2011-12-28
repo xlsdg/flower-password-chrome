@@ -1,6 +1,6 @@
 {
   "name": "Flower Password",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "花密 Flower Password --- 可记忆的密码管理方案",
   "homepage_url": "http://kisexu.com/huami",
   "icons": {
@@ -18,7 +18,8 @@
     }
   ],
   "page_action": {
-   },
+    "default_icon": "img/enabled.png"
+  },
   "background_page": "background.html",
   "options_page": "options.html",
   "permissions" : [
