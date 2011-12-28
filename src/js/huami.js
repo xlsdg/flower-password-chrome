@@ -74,7 +74,7 @@ function setupInputListeners() {
             $('#flower-password-input').hide();
         });
     } else {
-        $(document).off('focus.fp');
+        $(document).off('.fp');
     }
 }
 
@@ -129,5 +129,4 @@ onSetEnabled = function() {
 initOptions(function() {
     $('#flower-password-fill-key').prop("checked", isFillKeyWithDomain());
     setupHint();
-    setupInputListeners();
 });

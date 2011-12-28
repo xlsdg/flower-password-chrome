@@ -37,6 +37,7 @@ function getGlobalOptions(callback) {
         globalOptions = response;
         sendEnabled();
         if (callback) callback();
+        if (onSetEnabled) onSetEnabled();
     });
 }
 
