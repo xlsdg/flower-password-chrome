@@ -32,18 +32,17 @@ function readOptions() {
     }
 }
 
-function getGlobalOptions(callback) {
+function getGlobalOptions() {
     chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
         globalOptions = response;
         sendEnabled();
-        if (callback) callback();
         if (onSetEnabled) onSetEnabled();
     });
 }
 
-function initOptions(callback) {
+function initOptions() {
     readOptions();
-    getGlobalOptions(callback);
+    getGlobalOptions();
 }
 
 function isFillKeyWithDomain() {
