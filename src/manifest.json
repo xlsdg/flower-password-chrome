@@ -17,8 +17,6 @@
     }
   ],
   "page_action": {
-      "default_icon": "img/icon16.png",
-      "default_title": "花密"
    },
   "background_page": "background.html",
   "permissions" : [

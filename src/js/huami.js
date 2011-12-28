@@ -34,7 +34,8 @@ $('body').append(
         '<label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" maxlength="20" />' +
         '<br>' +
         '<input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入分区代号</label>' +
-        '<p>· 记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。<br>· 区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。<br>· 快捷键：Alt+S聚焦到记忆密码输入框；Enter或Esc关闭本窗口。</p>' +
+        '<a id="flower-password-hint-control"><img src="' + chrome.extension.getURL('img/shrink.png') + '" /> 收起</a>' +
+        '<p id="flower-password-hint">· 记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。<br>· 区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。<br>· 快捷键：Alt+S聚焦到记忆密码输入框；Enter或Esc关闭本窗口。</p>' +
     '</div>'
 );
 $('head').append(
@@ -48,29 +49,35 @@ function insideBox(e) {
 };
 
 var currentField = null;
-$(document).on('focus', 'input:password', function() {
-    if (insideBox($(this))) {
-        return;
+function setupInputListeners() {
+    if (isEnabled()) {
+        $(document).on('focus.fp', 'input:password', function() {
+            if (insideBox($(this))) {
+                return;
+            }
+            if (!currentField || currentField.get(0) != this) {
+                $('#flower-password-password').val('');
+                if (isFillKeyWithDomain()) {
+                    $("#flower-password-key").val(getDomain(window.location.hostname));
+                } else {
+                    $("#flower-password-key").val('');
+                }
+            }
+            currentField = $(this);
+            var offset = currentField.offset();
+            var height = currentField.outerHeight();
+            $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"}).show();
+        });
+        $(document).on('focus.fp', 'input:not(:password)', function() {
+            if (insideBox($(this))) {
+                return;
+            }
+            $('#flower-password-input').hide();
+        });
+    } else {
+        $(document).on('focus.fp');
     }
-    if (!currentField || currentField.get(0) != this) {
-        $('#flower-password-password').val('');
-        if (isFillKeyWithDomain()) {
-            $("#flower-password-key").val(getDomain(window.location.hostname));
-        } else {
-            $("#flower-password-key").val('');
-        }
-    }
-    currentField = $(this);
-    var offset = currentField.offset();
-    var height = currentField.outerHeight();
-    $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"}).show();
-});
-$(document).on('focus', 'input:not(:password)', function() {
-    if (insideBox($(this))) {
-        return;
-    }
-    $('#flower-password-input').hide();
-});
+}
 
 function onChange() {
     var password = $("#flower-password-password").val();
@@ -87,9 +94,6 @@ $('#flower-password-password, #flower-password-key').change(onChange).keyup(onCh
     }
 });
 
-initOptions(function() {
-    $('#flower-password-fill-key').prop("checked", isFillKeyWithDomain());
-});
 $('#flower-password-fill-key').change(function(e) {
     var checked = $(this).prop("checked");
     setFillKeyWithDomain(checked);
@@ -101,3 +105,14 @@ $('#flower-password-fill-key').change(function(e) {
 $('#flower-password-close').click(function() {
     $('#flower-password-input').hide();
 });
+
+initOptions(function() {
+    $('#flower-password-fill-key').prop("checked", isFillKeyWithDomain());
+    setupInputListeners();
+});
+onSetEnabled = function() {
+    if (!isEnabled()) {
+        $('#flower-password-input').hide();
+    }
+    setupInputListeners();
+};

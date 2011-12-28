@@ -9,18 +9,8 @@ function readOptions() {
 }
 
 function setOption(name, value) {
-    console.log(name + ":" + value);
     options[name] = value;
     localStorage[name] = JSON.stringify(value);
-}
-
-function showPageAction(tab) {
-    var url = tab.url;
-    if (url.indexOf('http://') == 0 || url.indexOf('https://') == 0) {
-        chrome.pageAction.show(tab.id);
-    } else {
-        chrome.pageAction.hide(tab.id);
-    }
 }
 
 function showAllPageActions() {
@@ -29,11 +19,28 @@ function showAllPageActions() {
             var tabs = windows[i].tabs;
             if (tabs) {
                 for (var j = 0; j < tabs.length; j++) {
-                    showPageAction(tabs[j]);
+                    var tab = tabs[j];
+                    chrome.pageAction.hide(tab.id);
+                    chrome.tabs.sendRequest(tab.id, {action: 'requestEnabled'});
                 }
             }
         }
     });
+}
+
+function setPageEnabled(tab, value) {
+    var icon;
+    var title;
+    if (value) {
+        icon = 'img/enabled.png';
+        title = '在本网站停用花密';
+    } else {
+        icon = 'img/disabled.png';
+        title = '在本网站启用花密';
+    }
+    chrome.pageAction.show(tab.id);
+    chrome.pageAction.setIcon({tabId: tab.id, path: icon});
+    chrome.pageAction.setTitle({tabId: tab.id, title: title});
 }
 
 function attachListeners() {
@@ -42,10 +49,17 @@ function attachListeners() {
             sendResponse(options);
         } else if (request.action == 'setOption') {
             setOption(request.name, request.value);
+        } else if (request.action == 'setPageEnabled') {
+            setPageEnabled(sender.tab, request.value);
         }
     });
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-        showPageAction(tab);
+        if (tab.status == 'loading') {
+            chrome.pageAction.hide(tab.id);
+        }
+    });
+    chrome.pageAction.onClicked.addListener(function(tab) {
+        chrome.tabs.sendRequest(tab.id, {action: 'toggleEnabled'});
     });
 }
 
