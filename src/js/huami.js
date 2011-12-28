@@ -44,11 +44,10 @@ $('head').append(
     '</style>'
 );
 
+var currentField = null;
 function insideBox(e) {
     return e.parents('#flower-password-input').size() > 0;
 };
-
-var currentField = null;
 function setupInputListeners() {
     if (isEnabled()) {
         $(document).on('focus.fp', 'input:password', function() {
@@ -106,13 +105,29 @@ $('#flower-password-close').click(function() {
     $('#flower-password-input').hide();
 });
 
-initOptions(function() {
-    $('#flower-password-fill-key').prop("checked", isFillKeyWithDomain());
-    setupInputListeners();
+function setupHint() {
+    if (isShowHint()) {
+        $('#flower-password-hint-control').html('<img src="' + chrome.extension.getURL('img/shrink.png') + '" /> 收起');
+        $('#flower-password-hint').show();
+    } else {
+        $('#flower-password-hint-control').html('<img src="' + chrome.extension.getURL('img/expand.png') + '" /> 提示');
+        $('#flower-password-hint').hide();
+    }
+}
+$('#flower-password-hint-control').click(function() {
+    setShowHint(!isShowHint());
+    setupHint();
 });
+
 onSetEnabled = function() {
     if (!isEnabled()) {
         $('#flower-password-input').hide();
     }
     setupInputListeners();
 };
+
+initOptions(function() {
+    $('#flower-password-fill-key').prop("checked", isFillKeyWithDomain());
+    setupHint();
+    setupInputListeners();
+});

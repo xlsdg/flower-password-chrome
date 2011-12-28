@@ -100,15 +100,22 @@
 #flower-password-input a {
   color: #168BC3 !important;
   text-decoration: none;
+  cursor: pointer;
 }
 
 #flower-password-input a:hover {
   color: #FF881C !important;
   text-decoration: none;
+  cursor: pointer;
 }
 
 #flower-password-hint-control {
   font-size: 12px !important;
   text-align: right !important;
   display: block;
+}
+
+#flower-password-hint-control img {
+  position: relative;
+  top: 2px;
 }

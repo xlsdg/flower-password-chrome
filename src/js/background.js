@@ -70,7 +70,8 @@ function init() {
 }
 
 var options = {
-    fillKeyWithDomain: true
+    fillKeyWithDomain: true,
+    showHint: true
 };
 
 init();

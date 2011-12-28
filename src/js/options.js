@@ -50,6 +50,15 @@ function setFillKeyWithDomain(value) {
     chrome.extension.sendRequest({action: 'setOption', name: 'fillKeyWithDomain', value: value});
 }
 
+function isShowHint() {
+    return globalOptions.showHint;
+}
+
+function setShowHint(value) {
+    globalOptions.showHint = value;
+    chrome.extension.sendRequest({action: 'setOption', name: 'showHint', value: value});
+}
+
 function isEnabled() {
     if (typeof localOptions.enabled == 'undefined') {
         return true;
