@@ -32,13 +32,17 @@ function readOptions() {
     }
 }
 
-function initOptions(callback) {
-    readOptions();
-    sendEnabled();
+function getGlobalOptions(callback) {
     chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
         globalOptions = response;
-        callback();
+        sendEnabled();
+        if (callback) callback();
     });
+}
+
+function initOptions(callback) {
+    readOptions();
+    getGlobalOptions(callback);
 }
 
 function isFillKeyWithDomain() {
@@ -59,9 +63,13 @@ function setShowHint(value) {
     chrome.extension.sendRequest({action: 'setOption', name: 'showHint', value: value});
 }
 
+function isDefaultEnabled() {
+    return globalOptions.defaultEnabled;
+}
+
 function isEnabled() {
     if (typeof localOptions.enabled == 'undefined') {
-        return true;
+        return isDefaultEnabled();
     } else {
         return localOptions.enabled;
     }
@@ -84,7 +92,9 @@ function sendEnabled() {
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     if (request.action == 'toggleEnabled') {
         toggleEnabled();
-    } else if (request.action = 'requestEnabled') {
+    } else if (request.action == 'requestEnabled') {
         sendEnabled();
+    } else if (request.action == 'onOptionsChanged') {
+        getGlobalOptions();
     }
 });
