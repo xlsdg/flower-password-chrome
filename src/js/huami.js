@@ -99,7 +99,12 @@ function lazyInject() {
         var key = $("#flower-password-key").val();
         var result = countCode(password, key);
         if (result) {
-            currentField.val(result[0]);
+            var code = result[0];
+            var maxlength = parseInt(currentField.prop('maxlength'));
+            if (maxlength < 16) {
+                code = code.slice(0, maxlength);
+            }
+            currentField.val(code);
         }
     };
     $('#flower-password-password, #flower-password-key').change(onChange).keyup(onChange).keyup(function(e) {
