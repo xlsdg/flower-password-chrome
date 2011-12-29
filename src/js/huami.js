@@ -83,7 +83,7 @@ function lazyInject() {
             '<br>' +
             '<label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" maxlength="20" />' +
             '<br>' +
-            '<input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入分区代号</label>' +
+            '<input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入区分代号</label>' +
             '<span id="flower-password-toolbar"><a href="' + chrome.extension.getURL('options.html') + '" target="_blank"><img src="' + chrome.extension.getURL('img/options.png') + '" /> 设置</a><a id="flower-password-hint-control"><img src="' + chrome.extension.getURL('img/shrink.png') + '" /> 收起</a></span>' +
             '<p id="flower-password-hint">· 记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。<br>· 区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。<br>· 快捷键：Alt+S聚焦到记忆密码输入框；在页面任意地方按Alt+W，或者在上面两输入框中按Enter或Esc将关闭本窗口。</p>' +
         '</div>'
