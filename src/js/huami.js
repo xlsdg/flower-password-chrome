@@ -39,6 +39,7 @@ function setupInputListeners() {
             if (insideBox($(this))) {
                 return;
             }
+            lazyInject();
             if (!currentField || currentField.get(0) != this) {
                 $('#flower-password-password').val('');
                 if (isFillKeyWithDomain()) {
@@ -68,12 +69,14 @@ function setupInputListeners() {
     }
 }
 
-var injected = false;
+function isInjected() {
+    return $('#flower-password-input').size() > 0;
+}
+
 function lazyInject() {
-    if (!isEnabled() || injected) {
+    if (!isEnabled() || isInjected()) {
         return;
     }
-    injected = true;
 
     $('body').append(
         '<div id="flower-password-input" style="display: none;">' +
@@ -145,7 +148,6 @@ function lazyInject() {
 }
 
 onSetEnabled = function() {
-    lazyInject();
     setupInputListeners();
     if (!isEnabled()) {
         $('#flower-password-input').hide();
