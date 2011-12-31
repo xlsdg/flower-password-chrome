@@ -1,6 +1,7 @@
 var globalOptions = {};
 var localOptions = {
-    enabled: undefined
+    enabled: undefined,
+    appendScramble: undefined
 };
 var onSetEnabled = null;
 
@@ -52,6 +53,32 @@ function isFillKeyWithDomain() {
 function setFillKeyWithDomain(value) {
     globalOptions.fillKeyWithDomain = value;
     chrome.extension.sendRequest({action: 'setOption', name: 'fillKeyWithDomain', value: value});
+}
+
+function isDefaultAppendScramble() {
+    return globalOptions.defaultAppendScramble;
+}
+
+function isAppendScramble() {
+    if (typeof localOptions.appendScramble == 'undefined') {
+        return isDefaultAppendScramble();
+    } else {
+        return localOptions.appendScramble;
+    }
+}
+
+function setAppendScramble(value) {
+    setOption('appendScramble', value);
+    chrome.extension.sendRequest({action: 'setOption', name: 'appendScramble', value: value});
+}
+
+function getScramble() {
+    return globalOptions.scramble;
+}
+
+function setScramble(value) {
+    globalOptions.scramble = value;
+    chrome.extension.sendRequest({action: 'setOption', name: 'scramble', value: value});
 }
 
 function isShowHint() {

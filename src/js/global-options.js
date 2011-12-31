@@ -1,9 +1,22 @@
-chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
-    var options = response;
-    $('#flower-password-default-enabled').prop("checked", options.defaultEnabled).change(function() {
-        chrome.extension.sendRequest({action: 'setDefaultEnabled', value: this.checked});
-    });
-    $('#flower-password-fill-key').prop("checked", options.fillKeyWithDomain).change(function() {
-        chrome.extension.sendRequest({action: 'setOption', name: 'fillKeyWithDomain', value: this.checked});
-    });
-});
+var options = {
+    fillKeyWithDomain: true,
+    showHint: true,
+    defaultEnabled: true,
+    defaultAppendScramble: false,
+    scramble: ''
+};
+
+function readOptions() {
+    for (var name in options) {
+        if (typeof localStorage[name] == 'undefined') {
+            setOption(name, options[name]);
+        } else {
+            options[name] = JSON.parse(localStorage[name]);
+        }
+    }
+}
+
+function setOption(name, value) {
+    options[name] = value;
+    localStorage[name] = JSON.stringify(value);
+}

@@ -1,18 +1,3 @@
-function readOptions() {
-    for (var name in options) {
-        if (typeof localStorage[name] == 'undefined') {
-            setOption(name, options[name]);
-        } else {
-            options[name] = JSON.parse(localStorage[name]);
-        }
-    }
-}
-
-function setOption(name, value) {
-    options[name] = value;
-    localStorage[name] = JSON.stringify(value);
-}
-
 function forEachTab(callback) {
     chrome.windows.getAll({ populate: true }, function(windows) {
         for (var i = 0; i < windows.length; i++) {
@@ -71,12 +56,12 @@ function attachListeners() {
             sendResponse(options);
         } else if (request.action == 'setOption') {
             setOption(request.name, request.value);
+            if (request.name == 'defaultEnabled') {
+                hideAllPageActions();
+                notifyOptionsChanged();
+            }
         } else if (request.action == 'setPageEnabled') {
             setPageEnabled(sender.tab, request.value);
-        } else if (request.action == 'setDefaultEnabled') {
-            setOption('defaultEnabled', request.value);
-            hideAllPageActions();
-            notifyOptionsChanged();
         }
     });
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
@@ -94,11 +79,5 @@ function init() {
     attachListeners();
     showAllPageActions();
 }
-
-var options = {
-    fillKeyWithDomain: true,
-    showHint: true,
-    defaultEnabled: true
-};
 
 init();

@@ -56,13 +56,6 @@
   -webkit-appearance: none;
 }
 
-#flower-password-input input[type="checkbox"]:checked::after {
-  display: block;
-  position: relative;
-  top: -3px;
-  left: -5px;
-}
-
 #flower-password-input label {
   vertical-align: middle !important;
   display: inline;
