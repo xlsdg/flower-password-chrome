@@ -177,16 +177,19 @@ p{
 	padding:5px 0 0;
 	width:540px;
 	}
+div.field {
+  margin: 20px 0 !important;
+}
 input[type="checkbox"] {
-  margin: 10px !important;
+  margin: 0 10px !important;
   border: 1px solid #999 !important;
   border-radius: 3px;
   vertical-align: middle !important;
   display: inline-block;
   width: 13px;
   height: 13px;
-  box-sizing: content-box !important;
   cursor: pointer;
+  box-sizing: content-box !important;
   -webkit-appearance: none;
 }
 input[type="checkbox"]:checked::after {

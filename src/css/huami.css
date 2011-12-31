@@ -1,5 +1,5 @@
 #flower-password-input, #flower-password-input span, #flower-password-input h1, #flower-password-input label,
-#flower-password-input input, #flower-password-input p, #flower-password-input a {
+#flower-password-input input, #flower-password-input p, #flower-password-input a, #flower-password-input div {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -29,9 +29,13 @@
   margin: 0 0 5px !important;
 }
 
+#flower-password-input div.field {
+  margin: 10px 0 !important;
+}
+
 #flower-password-input input[type="text"], #flower-password-input input[type="password"] {
   padding: 5px !important;
-  margin: 5px 10px !important;
+  margin: 0 10px !important;
   border: 1px solid #999 !important;
   border-radius: 3px;
   font-size: 14px !important;
@@ -41,7 +45,7 @@
 }
 
 #flower-password-input input[type="checkbox"] {
-  margin: 10px !important;
+  margin: 0 10px !important;
   border: 1px solid #999 !important;
   border-radius: 3px;
   vertical-align: middle !important;
@@ -63,12 +67,6 @@
   vertical-align: middle !important;
   display: inline;
   float: none;
-}
-
-#flower-password-input p {
-  font-size: 12px !important;
-  color: #999 !important;
-  line-height: 1.5 !important;
 }
 
 #flower-password-close {
@@ -110,7 +108,6 @@
 }
 
 #flower-password-toolbar {
-  display: block;
   text-align: right !important;
 }
 
@@ -126,4 +123,12 @@
 
 #flower-password-hint {
   margin-top: 2px !important;
+  font-size: 12px !important;
+  color: #999 !important;
+  line-height: 1.5 !important;
+  display: block;
+}
+
+#flower-password-hint li {
+  list-style: circle inside none;
 }
