@@ -1,8 +1,8 @@
 function fillKey(reset) {
-    if (isFillKeyWithDomain()) {
+    if (options.isFillKeyWithDomain()) {
         var value = $.getDomain();
-        if (isAppendScramble()) {
-            value += getScramble();
+        if (options.isAppendScramble()) {
+            value += options.getScramble();
         }
         $("#flower-password-key").valLimited(value);
     } else if (reset) {
@@ -12,7 +12,7 @@ function fillKey(reset) {
 
 var currentField = null;
 function setupInputListeners() {
-    if (isEnabled()) {
+    if (options.isEnabled()) {
         function insideBox(e) {
             return e.parents('#flower-password-input').size() > 0;
         }
@@ -46,12 +46,12 @@ function setupInputListeners() {
     }
 }
 
-function isInjected() {
-    return $('#flower-password-input').size() > 0;
-}
-
 function lazyInject() {
-    if (!isEnabled() || isInjected()) {
+    function isInjected() {
+        return $('#flower-password-input').size() > 0;
+    }
+
+    if (!options.isEnabled() || isInjected()) {
         return;
     }
 
@@ -100,53 +100,52 @@ function lazyInject() {
         }
     });
 
-    $('#flower-password-fill-key').prop("checked", isFillKeyWithDomain()).change(function(e) {
-        setFillKeyWithDomain(this.checked);
+    $('#flower-password-fill-key').prop("checked", options.isFillKeyWithDomain()).change(function(e) {
+        options.setFillKeyWithDomain(this.checked);
         fillKey();
     });
 
     var setupScrambleField = function() {
-        if (isAppendScramble() && getScramble() == '') {
-            $('#flower-password-scramble').val(getScramble());
+        if (options.isAppendScramble() && options.getScramble() == '') {
+            $('#flower-password-scramble').val(options.getScramble());
             $('#flower-password-scramble-field').show();
         } else {
             $('#flower-password-scramble-field').hide();
         }
     };
-    $('#flower-password-append-scramble').prop("checked", isAppendScramble()).change(function(e) {
-        setAppendScramble(this.checked);
+    $('#flower-password-append-scramble').prop("checked", options.isAppendScramble()).change(function(e) {
+        options.setAppendScramble(this.checked);
         fillKey();
         setupScrambleField();
     });
     setupScrambleField();
 
     var onScrambleChange = function() {
-        setScramble(this.value);
+        options.setScramble(this.value);
         fillKey();
     };
     $('#flower-password-scramble').change(onScrambleChange).keyup(onScrambleChange);
 
     var setupHint = function() {
-        if (isShowHint()) {
-            $('#flower-password-hint-control').html('<img src="' + chrome.extension.getURL('img/shrink.png') + '" /> 收起');
+        if (options.isShowHint()) {
+            $('#flower-password-hint-control').html('<img src="' + getURL('img/shrink.png') + '" /> 收起');
             $('#flower-password-hint').show();
         } else {
-            $('#flower-password-hint-control').html('<img src="' + chrome.extension.getURL('img/expand.png') + '" /> 提示');
+            $('#flower-password-hint-control').html('<img src="' + getURL('img/expand.png') + '" /> 提示');
             $('#flower-password-hint').hide();
         }
     }
     $('#flower-password-hint-control').click(function() {
-        setShowHint(!isShowHint());
+        options.toggleShowHint();
         setupHint();
     });
     setupHint();
 }
 
-onSetEnabled = function() {
+options.onSetEnabled = function() {
     setupInputListeners();
-    if (!isEnabled()) {
+    if (!options.isEnabled()) {
         $('#flower-password-input').hide();
     }
 };
-
-initOptions(); // initOptions() will call onSetEnabled()
+options.init(); // options.init() will call options.onSetEnabled()
