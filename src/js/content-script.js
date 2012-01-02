@@ -1,26 +1,10 @@
-function matchKey(e, which, modifier) {
-    var ctrl = $.isNotUndefined(modifier) && (modifier.ctrl == true);
-    var alt = $.isNotUndefined(modifier) && (modifier.alt == true);
-    var shift = $.isNotUndefined(modifier) && (modifier.shift == true);
-    var meta = $.isNotUndefined(modifier) && (modifier.meta == true);
-    return e.which == which && e.ctrlKey == ctrl && e.altKey == alt && e.shiftKey == shift && e.metaKey == meta;
-}
-
-function setInputValue(input, value) {
-    var maxlength = parseInt(input.prop('maxlength'));
-    if (maxlength < value.length) {
-        value = value.slice(0, maxlength);
-    }
-    input.val(value);
-}
-
 function fillKey(reset) {
     if (isFillKeyWithDomain()) {
         var value = $.getDomain();
         if (isAppendScramble()) {
             value += getScramble();
         }
-        setInputValue($("#flower-password-key"), value);
+        $("#flower-password-key").valLimited(value);
     } else if (reset) {
         $("#flower-password-key").val('');
     }
@@ -53,7 +37,7 @@ function setupInputListeners() {
             $('#flower-password-input').hide();
         });
         $(document).on('keydown.fp', function(e) {
-            if (matchKey(e, 87, {alt: true})) {
+            if (e.matchKey(87, {alt: true})) {
                 $('#flower-password-input').hide();
             }
         });
@@ -106,11 +90,11 @@ function lazyInject() {
         var result = flowerPassword.encrypt(password, key);
         if (result) {
             var code = result[0];
-            setInputValue(currentField, code);
+            currentField.valLimited(code);
         }
     };
     $('#flower-password-password, #flower-password-key').change(onPasswordChange).keyup(onPasswordChange).keyup(function(e) {
-        if (matchKey(e, 13) || matchKey(e, 27)) {
+        if (e.matchKey(13) || e.matchKey(27)) {
             currentField.focus();
             $('#flower-password-input').hide();
         }
