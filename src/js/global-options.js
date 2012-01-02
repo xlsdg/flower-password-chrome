@@ -8,7 +8,7 @@ var options = {
 
 function readOptions() {
     for (var name in options) {
-        if (typeof localStorage[name] == 'undefined') {
+        if (isUndefined(localStorage[name])) {
             setOption(name, options[name]);
         } else {
             options[name] = JSON.parse(localStorage[name]);

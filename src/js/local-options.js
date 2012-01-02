@@ -11,7 +11,7 @@ function setStorage(name, value) {
 
 function getStorage(name) {
     var value = localStorage['flower-password-' + name];
-    if (typeof value != 'undefined') value = JSON.parse(value);
+    if ($.isNotUndefined(value)) value = JSON.parse(value);
     return value;
 }
 
@@ -23,8 +23,8 @@ function setOption(name, value) {
 function readOptions() {
     for (var name in localOptions) {
         var value = getStorage(name);
-        if (typeof value == 'undefined') {
-            if (typeof localOptions[name] != 'undefined') {
+        if ($.isUndefined(value)) {
+            if ($.isNotUndefined(localOptions[name])) {
                 setStorage(name, localOptions[name]);
             }
         } else {
@@ -60,7 +60,7 @@ function isDefaultAppendScramble() {
 }
 
 function isAppendScramble() {
-    if (typeof localOptions.appendScramble == 'undefined') {
+    if ($.isUndefined(localOptions.appendScramble)) {
         return isDefaultAppendScramble();
     } else {
         return localOptions.appendScramble;
@@ -95,7 +95,7 @@ function isDefaultEnabled() {
 }
 
 function isEnabled() {
-    if (typeof localOptions.enabled == 'undefined') {
+    if ($.isUndefined(localOptions.enabled)) {
         return isDefaultEnabled();
     } else {
         return localOptions.enabled;

@@ -45,9 +45,9 @@ function setPageEnabled(tab, value) {
         icon = 'img/disabled.png';
         title = '单击后将在本网站启用花密';
     }
-    chrome.pageAction.show(tab.id);
     chrome.pageAction.setIcon({tabId: tab.id, path: icon});
     chrome.pageAction.setTitle({tabId: tab.id, title: title});
+    chrome.pageAction.show(tab.id);
 }
 
 function attachListeners() {

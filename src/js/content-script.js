@@ -1,35 +1,8 @@
-function countCode(password, key){
-    if(password && key){
-        var md5one = $.md5(password,key);
-        var md5two = $.md5(md5one,'snow');
-        var md5three = $.md5(md5one,'kise');
-        //计算大小写
-        var rule = md5three.split("");
-        var source = md5two.split("");
-        for(var i=0;i<=31;i++){ 
-            if(isNaN(source[i])){
-                var str ="sunlovesnow1990090127xykab";
-                if(str.search(rule[i]) > -1){
-                    source[i] = source[i].toUpperCase();
-                }
-            }
-        }
-        var code32 = source.join("");
-        var code1 = code32.slice(0,1);
-        if(isNaN(code1)){
-            var code16 = code32.slice(0,16);
-        }else{
-            var code16 = "K" + code32.slice(1,16);
-        }
-        return [code16, code32];
-    }
-}
-
 function matchKey(e, which, modifier) {
-    var ctrl = (typeof modifier != 'undefined') && (modifier.ctrl == true);
-    var alt = (typeof modifier != 'undefined') && (modifier.alt == true);
-    var shift = (typeof modifier != 'undefined') && (modifier.shift == true);
-    var meta = (typeof modifier != 'undefined') && (modifier.meta == true);
+    var ctrl = $.isNotUndefined(modifier) && (modifier.ctrl == true);
+    var alt = $.isNotUndefined(modifier) && (modifier.alt == true);
+    var shift = $.isNotUndefined(modifier) && (modifier.shift == true);
+    var meta = $.isNotUndefined(modifier) && (modifier.meta == true);
     return e.which == which && e.ctrlKey == ctrl && e.altKey == alt && e.shiftKey == shift && e.metaKey == meta;
 }
 
@@ -43,7 +16,7 @@ function setInputValue(input, value) {
 
 function fillKey(reset) {
     if (isFillKeyWithDomain()) {
-        var value = getDomain(window.location.hostname);
+        var value = $.getDomain();
         if (isAppendScramble()) {
             value += getScramble();
         }
@@ -130,7 +103,7 @@ function lazyInject() {
     var onPasswordChange = function() {
         var password = $("#flower-password-password").val();
         var key = $("#flower-password-key").val();
-        var result = countCode(password, key);
+        var result = flowerPassword.encrypt(password, key);
         if (result) {
             var code = result[0];
             setInputValue(currentField, code);

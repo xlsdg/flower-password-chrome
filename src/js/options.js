@@ -1,17 +1,22 @@
 chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
     var options = response;
+
+    function setOption(name, value) {
+        chrome.extension.sendRequest({action: 'setOption', name: name, value: value});
+    }
+
     $('#flower-password-default-enabled').prop("checked", options.defaultEnabled).change(function() {
-        chrome.extension.sendRequest({action: 'setOption', name: 'defaultEnabled', value: this.checked});
+        setOption('defaultEnabled', this.checked);
     });
     $('#flower-password-fill-key').prop("checked", options.fillKeyWithDomain).change(function() {
-        chrome.extension.sendRequest({action: 'setOption', name: 'fillKeyWithDomain', value: this.checked});
+        setOption('fillKeyWithDomain', this.checked);
     });
     $('#flower-password-append-scramble').prop("checked", options.defaultAppendScramble).change(function() {
-        chrome.extension.sendRequest({action: 'setOption', name: 'defaultAppendScramble', value: this.checked});
+        setOption('defaultAppendScramble', this.checked);
     });
 
     var onScrambleChange = function() {
-        chrome.extension.sendRequest({action: 'setOption', name: 'scramble', value: this.value});
+        setOption('scramble', this.value);
     };
     $('#flower-password-scramble').val(options.scramble).change(onScrambleChange).keyup(onScrambleChange);
 });

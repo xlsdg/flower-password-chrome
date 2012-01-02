@@ -1,5 +1,6 @@
-#flower-password-input, #flower-password-input span, #flower-password-input h1, #flower-password-input label,
-#flower-password-input input, #flower-password-input p, #flower-password-input a, #flower-password-input div {
+#flower-password-input, #flower-password-input span, #flower-password-input h1, #flower-password-input div,
+#flower-password-input label, #flower-password-input input, #flower-password-input img, #flower-password-input a,
+#flower-password-input ul, #flower-password-input li {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -11,6 +12,19 @@
 	vertical-align: baseline;
   line-height: 1;
   box-sizing: content-box !important;
+}
+
+#flower-password-input, #flower-password-input span, #flower-password-input h1, #flower-password-input div,
+#flower-password-input ul {
+  display: block;
+}
+
+#flower-password-input label, #flower-password-input input, #flower-password-input img, #flower-password-input a {
+  display: inline;
+}
+
+#flower-password-input li {
+  display: list-item;
 }
 
 #flower-password-input {
@@ -39,7 +53,6 @@
   border: 1px solid #999 !important;
   border-radius: 3px;
   font-size: 14px !important;
-  display: inline;
   height: 18px;
   width: 160px;
 }
@@ -58,7 +71,6 @@
 
 #flower-password-input label {
   vertical-align: middle !important;
-  display: inline;
   float: none;
 }
 
@@ -67,7 +79,6 @@
   font-weight: bold !important;
   color: #FFF !important;
   background: #168BC3 !important;
-  display: block;
   width: 16px;
   height: 16px;
   overflow: hidden;
@@ -107,7 +118,6 @@
 #flower-password-toolbar a {
   font-size: 12px !important;
   margin-left: 10px !important;
-  display: inline;
 }
 
 #flower-password-input a img {
@@ -116,12 +126,11 @@
 
 #flower-password-hint {
   margin-top: 2px !important;
-  font-size: 12px !important;
-  color: #999 !important;
-  line-height: 1.5 !important;
-  display: block;
 }
 
 #flower-password-hint li {
+  font-size: 12px !important;
+  color: #999 !important;
+  line-height: 1.5 !important;
   list-style: circle inside none;
 }

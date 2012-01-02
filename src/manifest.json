@@ -1,6 +1,6 @@
 {
   "name": "Flower Password",
-  "version": "1.0.7",
+  "version": "1.1",
   "description": "花密 Flower Password --- 可记忆的密码管理方案",
   "homepage_url": "http://kisexu.com/huami",
   "icons": {
@@ -11,8 +11,8 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "css": ["css/huami.css"],
-      "js": ["js/jquery.js", "js/md5.js", "js/domain.js", "js/local-options.js", "js/huami.js"],
+      "css": ["css/content-script.css"],
+      "js": ["js/libs/jquery.js", "js/libs/md5.js", "js/libs/utils.js", "js/libs/domain.js", "js/core/flower-password.js", "js/local-options.js", "js/content-script.js"],
       "run_at": "document_end",
       "all_frames": true
     }
