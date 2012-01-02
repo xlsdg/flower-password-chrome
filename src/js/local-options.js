@@ -38,12 +38,16 @@
         }
     }
 
-    function getGlobalOptions() {
-        chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
-            globalOptions = response;
+    function setGlobalOptions(value) {
+        if ($.isNotUndefined(value)) {
+            globalOptions = value;
             sendEnabled();
             triggerOnSetEnabled();
-        });
+        }
+    }
+
+    function getGlobalOptions() {
+        chrome.extension.sendRequest({action: 'getOptions'}, setGlobalOptions);
     }
 
     function sendEnabled() {
@@ -115,17 +119,17 @@
         },
         toggleEnabled: function() {
             options.setEnabled(!options.isEnabled());
-            sendEnabled();
         }
     };
 
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         if (request.action == 'toggleEnabled') {
             options.toggleEnabled();
-        } else if (request.action == 'requestEnabled') {
-            sendEnabled();
-        } else if (request.action == 'onOptionsChanged') {
-            getGlobalOptions();
+            sendResponse(options.isEnabled());
+        } else if (request.action == 'getEnabled') {
+            sendResponse(options.isEnabled());
+        } else if (request.action == 'setGlobalOptions') {
+            setGlobalOptions(request.value);
         }
     });
 })();

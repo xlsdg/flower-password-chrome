@@ -12,12 +12,6 @@ function forEachTab(callback) {
     });
 }
 
-function hideAllPageActions() {
-    forEachTab(function(tab) {
-        chrome.pageAction.hide(tab.id);
-    });
-}
-
 function showAllPageActions() {
     forEachTab(function(tab) {
         updatePageAction(tab);
@@ -26,16 +20,25 @@ function showAllPageActions() {
 
 function updatePageAction(tab) {
     chrome.pageAction.hide(tab.id);
-    chrome.tabs.sendRequest(tab.id, {action: 'requestEnabled'});
+    chrome.tabs.sendRequest(tab.id, {action: 'getEnabled'}, setPageEnabled(tab));
 }
 
 function notifyOptionsChanged() {
     forEachTab(function(tab) {
-        chrome.tabs.sendRequest(tab.id, {action: 'onOptionsChanged'});
+        chrome.pageAction.hide(tab.id);
+        chrome.tabs.sendRequest(tab.id, {action: 'setGlobalOptions', value: options});
     });
 }
 
 function setPageEnabled(tab, value) {
+    if (isUndefined(value)) {
+        return function(v) {
+            if (isNotUndefined(v)) {
+                setPageEnabled(tab, v);
+            }
+        }
+    }
+
     var icon;
     var title;
     if (value) {
@@ -57,7 +60,6 @@ function attachListeners() {
         } else if (request.action == 'setOption') {
             setOption(request.name, request.value);
             if (request.name == 'defaultEnabled') {
-                hideAllPageActions();
                 notifyOptionsChanged();
             }
         } else if (request.action == 'setPageEnabled') {
@@ -70,7 +72,7 @@ function attachListeners() {
         }
     });
     chrome.pageAction.onClicked.addListener(function(tab) {
-        chrome.tabs.sendRequest(tab.id, {action: 'toggleEnabled'});
+        chrome.tabs.sendRequest(tab.id, {action: 'toggleEnabled'}, setPageEnabled(tab));
     });
 }
 
