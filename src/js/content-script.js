@@ -30,7 +30,7 @@ function setupInputListeners() {
             var height = currentField.outerHeight();
             $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"}).show();
         });
-        $(document).on('focus.fp', 'input:not(:password)', function() {
+        $(document).on('focus.fp', 'input:not(:password), select, textarea, button', function() {
             if (insideBox($(this))) {
                 return;
             }
@@ -84,7 +84,7 @@ function lazyInject() {
         $('#flower-password-input').hide();
     });
 
-    var onPasswordChange = function() {
+    $('#flower-password-password, #flower-password-key').change(function() {
         var password = $("#flower-password-password").val();
         var key = $("#flower-password-key").val();
         var result = flowerPassword.encrypt(password, key);
@@ -92,15 +92,16 @@ function lazyInject() {
             var code = result[0];
             currentField.valLimited(code);
         }
-    };
-    $('#flower-password-password, #flower-password-key').change(onPasswordChange).keyup(onPasswordChange).keyup(function(e) {
+    }).keyup(function(e) {
         if (e.matchKey(13) || e.matchKey(27)) {
             currentField.focus();
             $('#flower-password-input').hide();
+        } else {
+            $(this).change();
         }
     });
 
-    $('#flower-password-fill-key').prop("checked", options.isFillKeyWithDomain()).change(function(e) {
+    $('#flower-password-fill-key').prop("checked", options.isFillKeyWithDomain()).change(function() {
         options.setFillKeyWithDomain(this.checked);
         fillKey();
     });
