@@ -27,6 +27,7 @@ if (typeof jQuery === 'function') {
                 value = value.slice(0, maxlength);
             }
             this.val(value);
+            return this;
         }
     })(jQuery);
 }

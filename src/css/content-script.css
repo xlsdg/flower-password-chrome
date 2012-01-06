@@ -40,10 +40,9 @@
   font-size: 19px !important;
   font-weight: bold !important;
   color: #168BC3 !important;
-  margin: 0 0 5px !important;
 }
 
-#flower-password-input div.field {
+#flower-password-input div.flower-password-field {
   margin: 10px 0 !important;
 }
 
