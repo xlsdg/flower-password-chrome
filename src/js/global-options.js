@@ -1,4 +1,5 @@
 var options = {
+    saveLastKey: true,
     fillKeyWithDomain: true,
     showHint: true,
     defaultEnabled: true,

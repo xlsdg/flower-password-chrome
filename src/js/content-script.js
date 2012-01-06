@@ -1,5 +1,9 @@
 function fillKey(reset) {
-    if (options.isFillKeyWithDomain()) {
+    $("#flower-password-key").removeClass('flower-password-last flower-password-default');
+    if (options.hasLastKey()) {
+        var value = options.getLastKey();
+        $("#flower-password-key").valLimited(value).change().addClass('flower-password-last');
+    } else if (options.isFillKeyWithDomain()) {
         var value = $.getDomain();
         if (options.isAppendScramble()) {
             value += options.getScramble();
@@ -8,6 +12,11 @@ function fillKey(reset) {
     } else if (reset) {
         $("#flower-password-key").val('');
     }
+}
+
+function fillDefaultKey() {
+    options.removeLastKey();
+    fillKey();
 }
 
 var currentField = null;
@@ -100,13 +109,23 @@ function lazyInject() {
             $(this).change();
         }
     });
+
+    var oldKey = null;
     $('#flower-password-key').change(function() {
-        $(this).removeClass('flower-password-default');
+        var e = $(this);
+        var value = e.val();
+        if (value) {
+            options.setLastKey(value);
+        }
+        if (oldKey != value) {
+            e.removeClass('flower-password-last flower-password-default');
+            oldKey = value;
+        }
     });
 
     $('#flower-password-fill-key').prop("checked", options.isFillKeyWithDomain()).change(function() {
         options.setFillKeyWithDomain(this.checked);
-        fillKey();
+        fillDefaultKey();
     });
 
     var setupScrambleField = function() {
@@ -119,14 +138,14 @@ function lazyInject() {
     };
     $('#flower-password-append-scramble').prop("checked", options.isAppendScramble()).change(function(e) {
         options.setAppendScramble(this.checked);
-        fillKey();
+        fillDefaultKey();
         setupScrambleField();
     });
     setupScrambleField();
 
     var onScrambleChange = function() {
         options.setScramble(this.value);
-        fillKey();
+        fillDefaultKey();
     };
     $('#flower-password-scramble').change(onScrambleChange).keyup(onScrambleChange);
 

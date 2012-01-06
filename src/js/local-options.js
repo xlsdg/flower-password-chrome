@@ -2,11 +2,16 @@
     var globalOptions = {};
     var localOptions = {
         enabled: undefined,
-        appendScramble: undefined
+        appendScramble: undefined,
+        lastKey: undefined
     };
 
     function saveStorage(name, value) {
-        localStorage['flower-password-' + name] = JSON.stringify(value);
+        if ($.isNotUndefined(value)) {
+            localStorage['flower-password-' + name] = JSON.stringify(value);
+        } else {
+            delete localStorage['flower-password-' + name];
+        }
     }
 
     function loadStorage(name) {
@@ -62,6 +67,23 @@
         init: function() {
             readLocalOptions();
             getGlobalOptions();
+        },
+
+        hasLastKey: function() {
+            return globalOptions.saveLastKey && $.isNotUndefined(localOptions.lastKey);
+        },
+        getLastKey: function() {
+            return localOptions.lastKey;
+        },
+        setLastKey: function(value) {
+            if (globalOptions.saveLastKey) {
+                setLocalOption('lastKey', value);
+            } else {
+                options.removeLastKey();
+            }
+        },
+        removeLastKey: function() {
+            setLocalOption('lastKey', undefined);
         },
 
         isFillKeyWithDomain: function() {

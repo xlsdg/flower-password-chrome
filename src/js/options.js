@@ -8,6 +8,9 @@ chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
     $('#flower-password-default-enabled').prop("checked", options.defaultEnabled).change(function() {
         setOption('defaultEnabled', this.checked);
     });
+    $('#flower-password-last-key').prop("checked", options.saveLastKey).change(function() {
+        setOption('saveLastKey', this.checked);
+    });
     $('#flower-password-fill-key').prop("checked", options.fillKeyWithDomain).change(function() {
         setOption('fillKeyWithDomain', this.checked);
     });
