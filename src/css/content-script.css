@@ -68,6 +68,14 @@
   -webkit-appearance: none;
 }
 
+#flower-password-key.flower-password-default {
+  color: #888 !important;
+}
+
+#flower-password-key.flower-password-last {
+  background: #FAFFBD !important;
+}
+
 #flower-password-input label {
   vertical-align: middle !important;
   float: none;

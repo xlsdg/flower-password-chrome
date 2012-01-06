@@ -4,7 +4,7 @@ function fillKey(reset) {
         if (options.isAppendScramble()) {
             value += options.getScramble();
         }
-        $("#flower-password-key").valLimited(value).change();
+        $("#flower-password-key").valLimited(value).change().addClass('flower-password-default');
     } else if (reset) {
         $("#flower-password-key").val('');
     }
@@ -99,6 +99,9 @@ function lazyInject() {
         } else {
             $(this).change();
         }
+    });
+    $('#flower-password-key').change(function() {
+        $(this).removeClass('flower-password-default');
     });
 
     $('#flower-password-fill-key').prop("checked", options.isFillKeyWithDomain()).change(function() {
