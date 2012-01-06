@@ -4,7 +4,7 @@ function fillKey(reset) {
         if (options.isAppendScramble()) {
             value += options.getScramble();
         }
-        $("#flower-password-key").valLimited(value);
+        $("#flower-password-key").valLimited(value).change();
     } else if (reset) {
         $("#flower-password-key").val('');
     }
