@@ -23,7 +23,7 @@ var currentField = null;
 function setupInputListeners() {
     if (options.isEnabled()) {
 
-        function insideBox(e) {
+        function insideDialog(e) {
             return e.parents('#flower-password-input').size() > 0;
         }
 
@@ -39,8 +39,14 @@ function setupInputListeners() {
             return e.pageX >= b.left && e.pageX < b.right && e.pageY >= b.top && e.pageY < b.bottom;
         }
 
+        function locateDialog() {
+            var offset = currentField.offset();
+            var height = currentField.outerHeight();
+            $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"});
+        }
+
         $(document).on('focus.fp', 'input:password', function() {
-            if (insideBox($(this))) {
+            if (insideDialog($(this))) {
                 return;
             }
             lazyInject();
@@ -49,12 +55,11 @@ function setupInputListeners() {
                 fillKey(true);
             }
             currentField = $(this);
-            var offset = currentField.offset();
-            var height = currentField.outerHeight();
-            $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"}).show();
+            locateDialog();
+            $('#flower-password-input').show();
         });
         $(document).on('focusin.fp', function(e) {
-            if ($(e.target).is('input:password') || insideBox($(e.target))) {
+            if ($(e.target).is('input:password') || insideDialog($(e.target))) {
                 return;
             }
             $('#flower-password-input').hide();
@@ -70,8 +75,14 @@ function setupInputListeners() {
                 $('#flower-password-input').hide();
             }
         });
+        $(window).on('resize.fp', function() {
+            if ($('#flower-password-input').is(':visible')) {
+                locateDialog();
+            }
+        });
     } else {
         $(document).off('.fp');
+        $(window).off('.fp');
     }
 }
 
