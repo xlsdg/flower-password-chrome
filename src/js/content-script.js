@@ -120,11 +120,13 @@ function lazyInject() {
         '</style>'
     );
 
-    $('#flower-password-input').addClass('transparent').focusin(function() {
-        $(this).addClass('nontransparent');
-    }).focusout(function() {
-        $(this).removeClass('nontransparent');
-    });
+    if (options.isTransparent()) {
+        $('#flower-password-input').addClass('transparent').focusin(function() {
+            $(this).addClass('nontransparent');
+        }).focusout(function() {
+            $(this).removeClass('nontransparent');
+        });
+    }
 
     $('#flower-password-close').click(function() {
         $('#flower-password-input').hide();

@@ -69,6 +69,10 @@
             getGlobalOptions();
         },
 
+        isTransparent: function() {
+            return globalOptions.transparent;
+        },
+
         hasLastKey: function() {
             return globalOptions.saveLastKey && $.isNotUndefined(localOptions.lastKey);
         },
