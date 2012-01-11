@@ -39,7 +39,10 @@ function setupInputListeners() {
             var height = currentField.outerHeight();
             $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"}).show();
         });
-        $(document).on('focus.fp', 'input:not(:password), select, textarea, button', function() {
+        $(document).on('focus.fp', '*:not(:password)', function(e) {
+            if (this !== e.target) {
+                return;
+            }
             if (insideBox($(this))) {
                 return;
             }
@@ -85,7 +88,7 @@ function lazyInject() {
     );
     $('head').append(
         '<style type="text/css">' +
-            '#flower-password-input input[type="checkbox"]:checked::after { content: url(' + chrome.extension.getURL('img/checkmark.png') + '); }' +
+            '#flower-password-input input[type="checkbox"]:checked::after { content: url(' + getURL('img/checkmark.png') + '); }' +
         '</style>'
     );
 
