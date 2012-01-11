@@ -22,9 +22,23 @@ function fillDefaultKey() {
 var currentField = null;
 function setupInputListeners() {
     if (options.isEnabled()) {
+
         function insideBox(e) {
             return e.parents('#flower-password-input').size() > 0;
         }
+
+        function getBounds(e) {
+            var offset = e.offset();
+            var width = e.outerWidth();
+            var height = e.outerHeight();
+            return $.extend({right: offset.left + width, bottom: offset.top + height}, offset);
+        }
+
+        function insideBounds(e, t) {
+            var b = getBounds(t);
+            return e.pageX >= b.left && e.pageX < b.right && e.pageY >= b.top && e.pageY < b.bottom;
+        }
+
         $(document).on('focus.fp', 'input:password', function() {
             if (insideBox($(this))) {
                 return;
@@ -39,11 +53,14 @@ function setupInputListeners() {
             var height = currentField.outerHeight();
             $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"}).show();
         });
-        $(document).on('focus.fp', '*:not(:password)', function(e) {
-            if (this !== e.target) {
+        $(document).on('focusin.fp', function(e) {
+            if ($(e.target).is('input:password') || insideBox($(e.target))) {
                 return;
             }
-            if (insideBox($(this))) {
+            $('#flower-password-input').hide();
+        });
+        $(document).on('mousedown.fp', function(e) {
+            if ($(e.target).is('input:password') || insideBounds(e, $('#flower-password-input'))) {
                 return;
             }
             $('#flower-password-input').hide();
