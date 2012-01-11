@@ -36,6 +36,14 @@
   position: absolute;
 }
 
+#flower-password-input.transparent {
+  opacity: 0.5;
+}
+
+#flower-password-input.transparent:hover, #flower-password-input.transparent.nontransparent {
+  opacity: 1.0;
+}
+
 #flower-password-input h1 {
   font-size: 19px !important;
   font-weight: bold !important;
