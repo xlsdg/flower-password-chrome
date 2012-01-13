@@ -5,7 +5,8 @@ var options = {
     showHint: true,
     defaultEnabled: true,
     defaultAppendScramble: false,
-    scramble: ''
+    scramble: '',
+    updateShowed: false
 };
 
 function readOptions() {

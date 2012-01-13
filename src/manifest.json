@@ -10,6 +10,10 @@
   },
   "content_scripts": [
     {
+      "matches": ["http://flower-password-chrome.googlecode.com/svn/branches/host-on-google-code/src/update.html"],
+      "js": ["js/libs/jquery.js", "js/libs/utils.js", "js/update.js"]
+    },
+    {
       "matches": ["http://*/*", "https://*/*"],
       "css": ["css/content-script.css"],
       "js": ["js/libs/jquery.js", "js/libs/md5.js", "js/libs/utils.js", "js/libs/domain.js", "js/core/flower-password.js", "js/local-options.js", "js/content-script.js"],
