@@ -64,6 +64,8 @@ function attachListeners() {
             }
         } else if (request.action == 'setPageEnabled') {
             setPageEnabled(sender.tab, request.value);
+        } else if (request.action == 'openChromeExtensions') {
+            chrome.tabs.create({url: 'chrome://extensions'});
         }
     });
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
