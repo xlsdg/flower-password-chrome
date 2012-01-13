@@ -76,10 +76,18 @@ function attachListeners() {
     });
 }
 
+function showUpdatePage() {
+    if (!options.updateShowed) {
+        chrome.tabs.create({url: 'http://flower-password-chrome.googlecode.com/svn/branches/host-on-google-code/src/update.html'});
+        setOption('updateShowed', true);
+    }
+}
+
 function init() {
     readOptions();
     attachListeners();
     showAllPageActions();
+    showUpdatePage();
 }
 
 init();
