@@ -65,7 +65,7 @@ function setupInputListeners() {
             $('#flower-password-input').hide();
         });
         $(document).on('mousedown.fp', function(e) {
-            if ($(e.target).is('input:password') || insideBounds(e, $('#flower-password-input'))) {
+            if (!$('#flower-password-input').is(':visible') || $(e.target).is('input:password') || insideBounds(e, $('#flower-password-input'))) {
                 return;
             }
             $('#flower-password-input').hide();
