@@ -44,10 +44,12 @@
   opacity: 1.0;
 }
 
-#flower-password-input h1 {
+#flower-password-title {
   font-size: 19px !important;
   font-weight: bold !important;
   color: #168BC3 !important;
+  display: inline !important;
+  cursor: move;
 }
 
 #flower-password-input div.flower-password-field {

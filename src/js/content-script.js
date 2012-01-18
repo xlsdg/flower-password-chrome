@@ -20,6 +20,8 @@ function fillDefaultKey() {
 }
 
 var currentField = null;
+var dialogOffset = null;
+var mousedownOffset = null;
 function setupInputListeners() {
     if (options.isEnabled()) {
 
@@ -39,10 +41,25 @@ function setupInputListeners() {
             return e.pageX >= b.left && e.pageX < b.right && e.pageY >= b.top && e.pageY < b.bottom;
         }
 
-        function locateDialog() {
+        function calculateDialogOffset() {
             var offset = currentField.offset();
             var height = currentField.outerHeight();
-            $('#flower-password-input').css({left: offset.left + "px", top: offset.top + height + "px"});
+            dialogOffset = {left: offset.left, top: offset.top + height};
+            return dialogOffset;
+        }
+
+        function moveDialogOffset(e) {
+            return {
+                left: dialogOffset.left + (e.pageX - mousedownOffset.x),
+                top: dialogOffset.top + (e.pageY - mousedownOffset.y)
+            };
+        }
+
+        function locateDialog(offset) {
+            if (!offset) {
+                offset = calculateDialogOffset();
+            }
+            $('#flower-password-input').css({left: offset.left + "px", top: offset.top + "px"});
         }
 
         $(document).on('focus.fp', 'input:password', function() {
@@ -57,20 +74,40 @@ function setupInputListeners() {
             currentField = $(this);
             locateDialog();
             $('#flower-password-input').show();
-        });
-        $(document).on('focusin.fp', function(e) {
+        })
+        .on('focusin.fp', function(e) {
             if ($(e.target).is('input:password') || insideDialog($(e.target))) {
                 return;
             }
             $('#flower-password-input').hide();
-        });
-        $(document).on('mousedown.fp', function(e) {
+        })
+        .on('mousedown.fp', function(e) {
             if (!$('#flower-password-input').is(':visible') || $(e.target).is('input:password') || insideBounds(e, $('#flower-password-input'))) {
                 return;
             }
             $('#flower-password-input').hide();
-        });
-        $(document).on('keydown.fp', function(e) {
+        })
+        .on('mousedown.fp', '#flower-password-title', function(e) {
+            if (e.button == 0) {
+                mousedownOffset = {x: e.pageX, y: e.pageY};
+                e.preventDefault();
+            }
+        })
+        .on('mouseup.fp', function(e) {
+            if (mousedownOffset) {
+                dialogOffset = moveDialogOffset(e);
+                locateDialog(dialogOffset);
+                mousedownOffset = null;
+                e.preventDefault();
+            }
+        })
+        .on('mousemove.fp', function(e) {
+            if (mousedownOffset) {
+                locateDialog(moveDialogOffset(e));
+                e.preventDefault();
+            }
+        })
+        .on('keydown.fp', function(e) {
             if (e.matchKey(87, {alt: true})) {
                 $('#flower-password-input').hide();
             }
@@ -99,7 +136,7 @@ function lazyInject() {
     $('body').append(
         '<div id="flower-password-input" style="display: none;">' +
             '<span id="flower-password-close" title="关闭">关闭</span>' +
-            '<h1>花密 Flower Password <a href="http://kisexu.com/huami/" target="_blank"><img src="' + getURL('img/goto.png') + '" title="打开花密官网" /></a></h1>' +
+            '<h1><span id="flower-password-title">花密 Flower Password</span> <a href="http://kisexu.com/huami/" target="_blank"><img src="' + getURL('img/goto.png') + '" title="打开花密官网" /></a></h1>' +
             '<div class="flower-password-field"><label for="flower-password-password">记忆密码</label><input id="flower-password-password" name="flower-password-password" type="password" value="" maxlength="20" accesskey="S" /></div>' +
             '<div class="flower-password-field"><label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" maxlength="15" /></div>' +
             '<div class="flower-password-field"><input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入区分代号</label></div>' +
