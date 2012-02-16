@@ -136,7 +136,7 @@ function lazyInject() {
     $('body').append(
         '<div id="flower-password-input" style="display: none;">' +
             '<span id="flower-password-close" title="关闭">关闭</span>' +
-            '<h1><span id="flower-password-title">花密 Flower Password</span> <a href="http://kisexu.com/huami/" target="_blank"><img src="' + getURL('img/goto.png') + '" title="打开花密官网" /></a></h1>' +
+            '<h1><span id="flower-password-title">花密 Flower Password</span> <a href="http://flowerpassword.com/" target="_blank"><img src="' + getURL('img/goto.png') + '" title="打开花密官网" /></a></h1>' +
             '<div class="flower-password-field"><label for="flower-password-password">记忆密码</label><input id="flower-password-password" name="flower-password-password" type="password" value="" maxlength="20" accesskey="S" /></div>' +
             '<div class="flower-password-field"><label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" maxlength="15" /></div>' +
             '<div class="flower-password-field"><input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入区分代号</label></div>' +
@@ -146,7 +146,7 @@ function lazyInject() {
             '<ul id="flower-password-hint">' +
                 '<li>记忆密码：选择一个与个人信息无关的密码，防止社会工程学破解。</li>' +
                 '<li>区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。</li>' +
-                '<li>附加扰码：添加到默认填入的区分代号后面，用于提高默认区分代号的强度，应选取一个有别于所有密码的值。可适当加入分隔符，如“.abc”或“#abc”。</li>' +
+                '<li>附加扰码：添加到默认填入的区分代号后面，用于提高默认区分代号的强度。可适当加入分隔符，如“.abc”或“#abc”。</li>' +
                 '<li>快捷键：Alt+S聚焦到记忆密码输入框；在页面任意地方按Alt+W，或者在上面两输入框中按Enter或Esc将关闭本窗口。</li>' +
             '</ul>' +
         '</div>'
