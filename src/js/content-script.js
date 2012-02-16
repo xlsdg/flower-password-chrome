@@ -144,7 +144,7 @@ function lazyInject() {
             '<div class="flower-password-field" id="flower-password-scramble-field" style="display: none;"><label for="flower-password-scramble">附加扰码</label><input id="flower-password-scramble" name="flower-password-scramble" type="text" value="" maxlength="15" /></div>' +
             '<div id="flower-password-toolbar"><a href="' + getURL('options.html') + '" target="_blank"><img src="' + getURL('img/options.png') + '" /> 设置</a><a id="flower-password-hint-control"><img src="' + getURL('img/shrink.png') + '" /> 收起</a></div>' +
             '<ul id="flower-password-hint">' +
-                '<li>记忆密码：可选择一个简单易记的密码，用于生成其他高强度密码。</li>' +
+                '<li>记忆密码：选择一个与个人信息无关的密码，防止社会工程学破解。</li>' +
                 '<li>区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。</li>' +
                 '<li>附加扰码：添加到默认填入的区分代号后面，用于提高默认区分代号的强度，应选取一个有别于所有密码的值。可适当加入分隔符，如“.abc”或“#abc”。</li>' +
                 '<li>快捷键：Alt+S聚焦到记忆密码输入框；在页面任意地方按Alt+W，或者在上面两输入框中按Enter或Esc将关闭本窗口。</li>' +
