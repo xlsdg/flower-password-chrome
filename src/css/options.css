@@ -13,8 +13,8 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   vertical-align: baseline;
 }
 a img { border: none; }
-html{
-	/* background:#EBF0EF; */
+html, body {
+	background:#F2F2F2;
 }
 body{
 	font:14px/1.5 Tahoma, Helvetica, Arial, \5b8b\4f53;
@@ -180,11 +180,9 @@ p{
 div.field {
   margin: 20px 0 !important;
 }
-input[type="text"], #flower-password-input input[type="password"] {
+input[type="text"] {
   padding: 5px !important;
   margin: 0 10px !important;
-  border: 1px solid #999 !important;
-  border-radius: 3px;
   font-size: 14px !important;
   display: inline;
   height: 18px;
@@ -192,8 +190,6 @@ input[type="text"], #flower-password-input input[type="password"] {
 }
 input[type="checkbox"] {
   margin: 0 10px !important;
-  border: 1px solid #999 !important;
-  border-radius: 3px;
   vertical-align: middle !important;
   display: inline-block;
   width: 13px;
@@ -204,6 +200,18 @@ input[type="checkbox"] {
 }
 input[type="checkbox"]:checked::after {
   content: url(../img/checkmark.png);
+}
+input {
+  border: 1px solid #CCC;
+  border-radius: 3px;
+  background: #FFF;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+input:focus {
+  border-color: rgba(82, 168, 236, 0.8);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  outline: 0;
 }
 label {
   font-size:14px;
