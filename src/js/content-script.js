@@ -43,8 +43,13 @@ function setupInputListeners() {
 
         function calculateDialogOffset() {
             var offset = currentField.offset();
-            var height = currentField.outerHeight();
-            dialogOffset = {left: offset.left, top: offset.top + height};
+            var width = currentField.outerWidth();
+            if (offset.left - $(document).scrollLeft() + width + $('#flower-password-input').outerWidth() <= $(window).width()) {
+                dialogOffset = {left: offset.left + width, top: offset.top};
+            } else {
+                var height = currentField.outerHeight();
+                dialogOffset = {left: offset.left, top: offset.top + height};
+            }
             return dialogOffset;
         }
 
