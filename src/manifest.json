@@ -10,6 +10,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
+      "exclude_globs": ["http://flowerpassword.com/app/web/"],
       "css": ["css/content-script.css"],
       "js": ["js/libs/jquery.js", "js/libs/md5.js", "js/libs/utils.js", "js/libs/domain.js", "js/core/flower-password.js", "js/local-options.js", "js/content-script.js"],
       "run_at": "document_end",
