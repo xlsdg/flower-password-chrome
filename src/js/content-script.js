@@ -142,11 +142,11 @@ function lazyInject() {
         '<div id="flower-password-input" style="display: none;">' +
             '<span id="flower-password-close" title="关闭">关闭</span>' +
             '<h1><span id="flower-password-title">花密 Flower Password</span> <a href="http://flowerpassword.com/" target="_blank"><img src="' + getURL('img/goto.png') + '" title="打开花密官网" /></a></h1>' +
-            '<div class="flower-password-field"><label for="flower-password-password">记忆密码</label><input id="flower-password-password" name="flower-password-password" type="password" value="" maxlength="20" accesskey="S" /></div>' +
-            '<div class="flower-password-field"><label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" maxlength="15" /></div>' +
+            '<div class="flower-password-field"><label for="flower-password-password">记忆密码</label><input id="flower-password-password" name="flower-password-password" type="password" value="" accesskey="S" /></div>' +
+            '<div class="flower-password-field"><label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" /></div>' +
             '<div class="flower-password-field"><input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入区分代号</label></div>' +
             '<div class="flower-password-field"><input id="flower-password-append-scramble" name="flower-password-append-scramble" type="checkbox" /><label for="flower-password-append-scramble">在默认区分代号后加上附加扰码</label></div>' +
-            '<div class="flower-password-field" id="flower-password-scramble-field" style="display: none;"><label for="flower-password-scramble">附加扰码</label><input id="flower-password-scramble" name="flower-password-scramble" type="text" value="" maxlength="15" /></div>' +
+            '<div class="flower-password-field" id="flower-password-scramble-field" style="display: none;"><label for="flower-password-scramble">附加扰码</label><input id="flower-password-scramble" name="flower-password-scramble" type="text" value="" /></div>' +
             '<div id="flower-password-toolbar"><a href="' + getURL('options.html') + '" target="_blank"><img src="' + getURL('img/options.png') + '" /> 设置</a><a id="flower-password-hint-control"><img src="' + getURL('img/shrink.png') + '" /> 收起</a></div>' +
             '<ul id="flower-password-hint">' +
                 '<li>记忆密码：选择一个与个人信息无关的密码，防止社会工程学破解。</li>' +
