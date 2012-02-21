@@ -1,6 +1,6 @@
 #flower-password-input, #flower-password-input span, #flower-password-input h1, #flower-password-input div,
 #flower-password-input label, #flower-password-input input, #flower-password-input img, #flower-password-input a,
-#flower-password-input ul, #flower-password-input li {
+#flower-password-input ul, #flower-password-input li, #flower-password-input p {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -163,4 +163,44 @@
   color: #999 !important;
   line-height: 1.5 !important;
   list-style: circle inside none;
+}
+
+#flower-password-no-maxlength {
+  position: relative !important;
+  padding-top: 6px !important;
+}
+
+#flower-password-no-maxlength-arrow {
+  position: absolute !important;
+  top: -6px;
+  left: 180px;
+  width: 24px;
+  height: 13px;
+  overflow: hidden;
+}
+
+#flower-password-no-maxlength-arrow:after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  -webkit-transform: rotate(45deg);
+}
+
+#flower-password-no-maxlength-hint {
+  padding: 8px !important;
+  font-size: 12px !important;
+  border-radius: 3px;
+}
+
+#flower-password-no-maxlength-arrow:after, #flower-password-no-maxlength-hint {
+  background: #FEF1B6 !important;
+  border: 1px solid #D7D195 !important;
+}
+
+#flower-password-no-maxlength-hint p, #flower-password-no-maxlength-hint a {
+  background: #FEF1B6 !important;
+  line-height: 1.5 !important;
 }
