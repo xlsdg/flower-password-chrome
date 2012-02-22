@@ -136,6 +136,8 @@ function setupInputListeners() {
                 locateDialog();
             }
         });
+
+        $('input:password:focus').focus();
     } else {
         $(document).off('.fp');
         $(window).off('.fp');
