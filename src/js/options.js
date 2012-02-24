@@ -7,7 +7,6 @@ $(function() {
 
     $('#flower-password-default-enabled').prop("checked", options.global.cache.defaultEnabled).change(function() {
         options.global.set('defaultEnabled', this.checked);
-        chrome.extension.sendRequest({action: 'globalOptionsChanged'});
     });
     $('#flower-password-transparent').prop("checked", options.global.cache.transparent).change(function() {
         options.global.set('transparent', this.checked);

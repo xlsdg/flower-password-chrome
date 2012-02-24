@@ -59,8 +59,9 @@ function attachListeners() {
             sendResponse(options.global.cache);
         } else if (request.action == 'setGlobalOption') {
             options.global.set(request.name, request.value);
-        } else if (request.action == 'globalOptionsChanged') {
-            notifyOptionsChanged();
+            if (request.name == 'defaultEnabled') {
+                notifyOptionsChanged();
+            }
         } else if (request.action == 'setLocalEnabled') {
             setPageEnabled(sender.tab, request.value);
         }
