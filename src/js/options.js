@@ -1,28 +1,29 @@
-chrome.extension.sendRequest({action: 'getOptions'}, function(response) {
-    var options = response;
+$(function() {
+    options.init();
 
-    function setOption(name, value) {
-        chrome.extension.sendRequest({action: 'setOption', name: name, value: value});
-    }
-
-    $('#flower-password-default-enabled').prop("checked", options.defaultEnabled).change(function() {
-        setOption('defaultEnabled', this.checked);
-    });
-    $('#flower-password-transparent').prop("checked", options.transparent).change(function() {
-        setOption('transparent', this.checked);
-    });
-    $('#flower-password-last-key').prop("checked", options.saveLastKey).change(function() {
-        setOption('saveLastKey', this.checked);
-    });
-    $('#flower-password-fill-key').prop("checked", options.fillKeyWithDomain).change(function() {
-        setOption('fillKeyWithDomain', this.checked);
-    });
-    $('#flower-password-append-scramble').prop("checked", options.defaultAppendScramble).change(function() {
-        setOption('defaultAppendScramble', this.checked);
+    options.global.set = mergeFuns(options.global.set, function(name, value) {
+        chrome.extension.sendRequest({action: 'setGlobalOption', name: name, value: value});
     });
 
-    var onScrambleChange = function() {
-        setOption('scramble', this.value);
-    };
-    $('#flower-password-scramble').val(options.scramble).change(onScrambleChange).keyup(onScrambleChange);
+    $('#flower-password-default-enabled').prop("checked", options.global.cache.defaultEnabled).change(function() {
+        options.global.set('defaultEnabled', this.checked);
+        chrome.extension.sendRequest({action: 'globalOptionsChanged'});
+    });
+    $('#flower-password-transparent').prop("checked", options.global.cache.transparent).change(function() {
+        options.global.set('transparent', this.checked);
+    });
+    $('#flower-password-last-key').prop("checked", options.global.cache.saveLastKey).change(function() {
+        options.global.set('saveLastKey', this.checked);
+    });
+    $('#flower-password-fill-key').prop("checked", options.global.cache.fillKeyWithDomain).change(function() {
+        options.global.set('fillKeyWithDomain', this.checked);
+    });
+    $('#flower-password-append-scramble').prop("checked", options.global.cache.defaultAppendScramble).change(function() {
+        options.global.set('defaultAppendScramble', this.checked);
+    });
+    $('#flower-password-scramble').val(options.global.cache.scramble).change(function() {
+        options.global.set('scramble', this.value);
+    }).keyup(function() {
+        $(this).change();
+    });
 });

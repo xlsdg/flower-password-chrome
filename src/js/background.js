@@ -20,20 +20,20 @@ function showAllPageActions() {
 
 function updatePageAction(tab) {
     chrome.pageAction.hide(tab.id);
-    chrome.tabs.sendRequest(tab.id, {action: 'getEnabled'}, setPageEnabled(tab));
+    chrome.tabs.sendRequest(tab.id, {action: 'getLocalEnabled'}, setPageEnabled(tab));
 }
 
 function notifyOptionsChanged() {
     forEachTab(function(tab) {
         chrome.pageAction.hide(tab.id);
-        chrome.tabs.sendRequest(tab.id, {action: 'setGlobalOptions', value: options});
+        chrome.tabs.sendRequest(tab.id, {action: 'setGlobalOptions', value: options.global.cache});
     });
 }
 
 function setPageEnabled(tab, value) {
     if (isUndefined(value)) {
         return function(v) {
-            if (isNotUndefined(v)) {
+            if (!isUndefined(v)) {
                 setPageEnabled(tab, v);
             }
         }
@@ -55,14 +55,13 @@ function setPageEnabled(tab, value) {
 
 function attachListeners() {
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-        if (request.action == 'getOptions') {
-            sendResponse(options);
-        } else if (request.action == 'setOption') {
-            setOption(request.name, request.value);
-            if (request.name == 'defaultEnabled') {
-                notifyOptionsChanged();
-            }
-        } else if (request.action == 'setPageEnabled') {
+        if (request.action == 'getGlobalOptions') {
+            sendResponse(options.global.cache);
+        } else if (request.action == 'setGlobalOption') {
+            options.global.set(request.name, request.value);
+        } else if (request.action == 'globalOptionsChanged') {
+            notifyOptionsChanged();
+        } else if (request.action == 'setLocalEnabled') {
             setPageEnabled(sender.tab, request.value);
         }
     });
@@ -72,12 +71,12 @@ function attachListeners() {
         }
     });
     chrome.pageAction.onClicked.addListener(function(tab) {
-        chrome.tabs.sendRequest(tab.id, {action: 'toggleEnabled'}, setPageEnabled(tab));
+        chrome.tabs.sendRequest(tab.id, {action: 'toggleLocalEnabled'}, setPageEnabled(tab));
     });
 }
 
 function init() {
-    readOptions();
+    options.init();
     attachListeners();
     showAllPageActions();
 }

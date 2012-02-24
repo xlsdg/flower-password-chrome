@@ -1,16 +1,18 @@
-(function($) {
-    $.isUndefined = function(value) {
-        return typeof value === 'undefined';
+function isUndefined(value) {
+    return typeof value === 'undefined';
+}
+
+function mergeFuns(firstFun, secondFun) {
+    return function() {
+        if (firstFun) firstFun.apply(this, arguments);
+        if (secondFun) secondFun.apply(this, arguments);
     };
-    $.isNotUndefined = function(value) {
-        return !$.isUndefined(value);
-    };
-})(typeof jQuery === 'function' ? jQuery : this);
+}
 
 if (typeof jQuery === 'function') {
     (function($) {
         function isModifierSet(modifier, name) {
-            return $.isNotUndefined(modifier) && (modifier[name] == true);
+            return !isUndefined(modifier) && (modifier[name] == true);
         }
 
         $.Event.prototype.matchKey = function(which, modifier) {

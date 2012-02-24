@@ -16,7 +16,7 @@
     }
 
     $.getDomain = function(hostname) {
-        if ($.isUndefined(hostname)) {
+        if (isUndefined(hostname)) {
             hostname = window.location.hostname;
         }
         var map = getSuffixMap();
