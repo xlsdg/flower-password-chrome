@@ -54,16 +54,25 @@ function setPageEnabled(tab, value) {
 }
 
 function attachListeners() {
-    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-        if (request.action == 'getGlobalOptions') {
-            sendResponse(options.global.cache);
-        } else if (request.action == 'setGlobalOption') {
-            options.global.set(request.name, request.value);
-            if (request.name == 'defaultEnabled') {
+    messages.extension.handles = $.extend(messages.extension.handles, {
+        getGlobalOptions: function() {
+            return options.global.cache;
+        },
+        setGlobalOption: function(data) {
+            options.global.set(data.name, data.value);
+            if (data.name == 'defaultEnabled') {
                 notifyOptionsChanged();
             }
-        } else if (request.action == 'setLocalEnabled') {
-            setPageEnabled(sender.tab, request.value);
+        },
+        setLocalEnabled: function(data, sender) {
+            setPageEnabled(sender.tab, data.value);
+        }
+    });
+    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+        if (request.transit) {
+            chrome.tabs.sendRequest(sender.tab.id, request, function(response) {
+                sendResponse(response);
+            });
         }
     });
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {

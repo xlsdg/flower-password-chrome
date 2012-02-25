@@ -1,0 +1,215 @@
+body {
+  overflow: hidden;
+}
+
+html, body,
+#flower-password-input, #flower-password-input span, #flower-password-input h1, #flower-password-input div,
+#flower-password-input label, #flower-password-input input, #flower-password-input img, #flower-password-input a,
+#flower-password-input ul, #flower-password-input li, #flower-password-input p {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	font-size: 100%;
+  color: #000;
+  background: #FFF;
+  text-align: left;
+	vertical-align: baseline;
+  line-height: 1;
+  box-sizing: content-box !important;
+}
+
+#flower-password-input, #flower-password-input span, #flower-password-input h1, #flower-password-input div,
+#flower-password-input ul {
+  display: block;
+}
+
+#flower-password-input label, #flower-password-input input, #flower-password-input img, #flower-password-input a {
+  display: inline;
+}
+
+#flower-password-input li {
+  display: list-item;
+}
+
+#flower-password-input {
+  padding: 10px !important;
+  border: 2px solid #168BC3 !important;
+  font: normal 14px/1.5 Tahoma, Helvetica, Arial, "\5b8b\4f53" !important;
+  width: 250px;
+  z-index: 999999;
+  position: absolute;
+}
+
+#flower-password-input.transparent {
+  opacity: 0.5;
+}
+
+#flower-password-input.transparent:hover, #flower-password-input.transparent.nontransparent {
+  opacity: 1.0;
+}
+
+#flower-password-input h1 {
+  font-size: 19px !important;
+}
+
+#flower-password-title {
+  font-size: 19px !important;
+  font-weight: bold !important;
+  color: #168BC3 !important;
+  display: inline !important;
+  cursor: move;
+}
+
+#flower-password-input div.flower-password-field {
+  margin: 10px 0 !important;
+}
+
+#flower-password-input input[type="text"], #flower-password-input input[type="password"] {
+  padding: 5px !important;
+  margin: 0 10px !important;
+  font-size: 14px !important;
+  height: 18px;
+  width: 160px;
+}
+
+#flower-password-input input[type="checkbox"] {
+  margin: 0 10px !important;
+  vertical-align: middle !important;
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  cursor: pointer;
+  -webkit-appearance: none;
+}
+
+#flower-password-input input[type="checkbox"]:checked::after {
+  content: url(../img/checkmark.png);
+}
+
+#flower-password-input input {
+  border: 1px solid #BBB !important;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+#flower-password-input input:focus {
+  border-color: rgba(82, 168, 236, 0.8) !important;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+  outline: 0;
+}
+
+#flower-password-key.flower-password-default {
+  color: #888 !important;
+}
+
+#flower-password-key.flower-password-last {
+  background: #FAFFBD !important;
+}
+
+#flower-password-input label {
+  vertical-align: middle !important;
+  float: none;
+}
+
+#flower-password-close {
+  border: 2px solid #168BC3 !important;
+  font-weight: bold !important;
+  color: #FFF !important;
+  background: #168BC3 !important;
+  width: 16px;
+  height: 16px;
+  overflow: hidden;
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  cursor: pointer;
+}
+
+#flower-password-close::before {
+  text-align: center !important;
+  line-height: 16px !important;
+  content: "\D7";
+  display: block;
+  width: 16px;
+  height: 16px;
+  position: relative;
+  top: -1px;
+}
+
+#flower-password-input a {
+  color: #168BC3 !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#flower-password-input a:hover {
+  color: #FF881C !important;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#flower-password-toolbar {
+  text-align: right !important;
+}
+
+#flower-password-toolbar a {
+  font-size: 12px !important;
+  margin-left: 10px !important;
+}
+
+#flower-password-input a img {
+  vertical-align: middle !important;
+}
+
+#flower-password-hint {
+  margin-top: 2px !important;
+}
+
+#flower-password-hint li {
+  font-size: 12px !important;
+  color: #999 !important;
+  line-height: 1.5 !important;
+  list-style: circle inside none;
+}
+
+#flower-password-no-maxlength {
+  position: relative !important;
+  padding-top: 6px !important;
+}
+
+#flower-password-no-maxlength-arrow {
+  position: absolute !important;
+  top: -6px;
+  left: 180px;
+  width: 24px;
+  height: 13px;
+  overflow: hidden;
+}
+
+#flower-password-no-maxlength-arrow:after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 4px;
+  width: 16px;
+  height: 16px;
+  -webkit-transform: rotate(45deg);
+}
+
+#flower-password-no-maxlength-hint {
+  padding: 8px !important;
+  font-size: 12px !important;
+  border-radius: 3px;
+}
+
+#flower-password-no-maxlength-arrow:after, #flower-password-no-maxlength-hint {
+  background: #FEF1B6 !important;
+  border: 1px solid #D7D195 !important;
+}
+
+#flower-password-no-maxlength-hint p, #flower-password-no-maxlength-hint a {
+  background: #FEF1B6 !important;
+  line-height: 1.5 !important;
+}

@@ -12,8 +12,7 @@
       "matches": ["http://*/*", "https://*/*"],
       "exclude_globs": ["http://flowerpassword.com/app/web/"],
       "css": ["css/content-script.css"],
-      "js": ["js/libs/jquery.js", "js/libs/md5.js", "js/libs/utils.js", "js/libs/domain.js", "js/core/flower-password.js", "js/options/global.js", "js/options/local.js", "js/options/content-script.js", "js/content-script.js"],
-//      "js": ["js/libs/jquery.js", "js/libs/utils.js", "js/options/global.js", "js/options/local.js", "js/options/content-script.js", "js/content-script.js"],
+      "js": ["js/libs/jquery.js", "js/libs/utils.js", "js/libs/domain.js", "js/messages/extension.js", "js/messages/page.js", "js/options/global.js", "js/options/local.js", "js/options/content-script.js", "js/content-script.js"],
       "run_at": "document_end",
       "all_frames": true
     }
