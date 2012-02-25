@@ -65,17 +65,13 @@ function setupInputListeners() {
 }
 
 function lazyInject() {
-    function isInjected() {
-        return $('#flower-password-iframe').size() > 0;
-    }
-
-    if (!options.isEnabled() || isInjected()) {
+    if (!options.isEnabled() || $('#flower-password-iframe').size() > 0) {
         return;
     }
 
     options.setDomain($.getDomain());
 
-    $('body').append('<iframe id="flower-password-iframe" src="' + chrome.extension.getURL('iframe.html') + '" width="0" height="0" style="display: none;"></iframe>');
+    $('body').append('<iframe id="flower-password-iframe" src="' + chrome.extension.getURL('iframe.html') + '" style="display: none;"></iframe>');
     if (options.isTransparent()) {
         $('#flower-password-iframe').addClass('transparent');
     }
