@@ -44,12 +44,13 @@ input {
   -webkit-appearance: none;
 }
 
-.checkbox input[type="checkbox"]:checked::after {
+.checkbox input[type="checkbox"]:checked:after {
   content: url(../img/checkmark.png);
 }
 
 .form-horizontal .control-label {
   width: 70px;
+  padding-top: 6px;
 }
 
 .form-horizontal .controls {

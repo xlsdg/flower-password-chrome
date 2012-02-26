@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="css/bootstrap.css" />
 <link rel="stylesheet" href="css/iframe.css" />
 <script type="text/javascript" src="js/libs/jquery.js"></script>
 <script type="text/javascript" src="js/libs/md5.js"></script>
@@ -14,22 +15,39 @@
 <script type="text/javascript" src="js/iframe.js"></script>
 </head>
 <body>
-<div id="flower-password-input">
-	<span id="flower-password-close" title="关闭">关闭</span>
-	<h1><span id="flower-password-title">花密 Flower Password</span> <a href="http://flowerpassword.com/" target="_blank"><img src="img/goto.png" title="打开花密官网" /></a></h1>
-	<div class="flower-password-field"><label for="flower-password-password">记忆密码</label><input id="flower-password-password" name="flower-password-password" type="password" value="" /></div>
-	<div class="flower-password-field"><label for="flower-password-key">区分代号</label><input id="flower-password-key" name="flower-password-key" type="text" value="" /></div>
-	<div id="flower-password-no-maxlength" style="display: none;"><span id="flower-password-no-maxlength-arrow"></span><div id="flower-password-no-maxlength-hint">
-		<p>　旧版花密限制了区分代号的最大长度为15，新版花密已去除此限制，这意味着你可以使用更长更安全的区分代号。</p>
-		<p>　然而，此区分代号是由旧版花密生成的默认区分代号，其长度被限制为15，而由新版生成的默认区分代号则会更长。</p>
-		<p>　一旦您清除了历史记录，新的默认区分代号将导致最终生成的密码发生变化，这将导致您无法登录当前网站！</p>
-		<p>　因此，我们强烈建议您使用新的默认区分代号修改您在当前网站的密码。请您在输入新密码的时候，<a id="flower-password-fill-default-key">点击这里生成新的默认区分代号</a>。</p>
-	</div></div>
-	<div class="flower-password-field" title="对所有网站有效"><input id="flower-password-fill-key" name="flower-password-fill-key" type="checkbox" /><label for="flower-password-fill-key">默认将网站域名填入区分代号</label></div>
-	<div class="flower-password-field" title="只对本网站有效"><input id="flower-password-append-scramble" name="flower-password-append-scramble" type="checkbox" /><label for="flower-password-append-scramble">在默认区分代号后加上附加扰码</label></div>
-	<div class="flower-password-field" id="flower-password-scramble-field" style="display: none;"><label for="flower-password-scramble">附加扰码</label><input id="flower-password-scramble" name="flower-password-scramble" type="text" value="" /></div>
-	<div id="flower-password-toolbar"><a href="options.html" target="_blank"><img src="img/options.png" /> 设置</a><a id="flower-password-hint-shrink"><img src="img/shrink.png" /> 收起</a><a id="flower-password-hint-expand"><img src="img/expand.png" /> 提示</a></div>
-	<ul id="flower-password-hint">
+<div id="main">
+	<span id="close" title="关闭">关闭</span>
+	<h1><span id="title">花密 Flower Password</span> <a href="http://flowerpassword.com/" target="_blank"><img src="img/goto.png" title="打开花密官网" /></a></h1>
+	<fieldset class="form-horizontal">
+		<div class="control-group">
+			<label class="control-label" for="password">记忆密码</label>
+			<div class="controls"><input id="password" type="password" value="" /></div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="key">区分代号</label>
+			<div class="controls"><input id="key" type="text" value="" /></div>
+			<div id="no-maxlength" style="display: none;"><span id="no-maxlength-arrow"></span>
+				<div id="no-maxlength-hint">
+					<p>　旧版花密限制了区分代号的最大长度为15，新版花密已去除此限制，这意味着你可以使用更长更安全的区分代号。</p>
+					<p>　然而，此区分代号是由旧版花密生成的默认区分代号，其长度被限制为15，而由新版生成的默认区分代号则会更长。</p>
+					<p>　一旦您清除了历史记录，新的默认区分代号将导致最终生成的密码发生变化，这将导致您无法登录当前网站！</p>
+					<p>　因此，我们强烈建议您使用新的默认区分代号修改您在当前网站的密码。请您在输入新密码的时候，<a id="fill-default-key">点击这里生成新的默认区分代号</a>。</p>
+				</div>
+			</div>
+		</div>
+		<div class="control-group" title="对所有网站有效">
+			<label class="checkbox"><input id="fill-key" type="checkbox" />默认将网站域名填入区分代号</label>
+		</div>
+		<div class="control-group" title="只对本网站有效">
+			<label class="checkbox"><input id="append-scramble" type="checkbox" />在默认区分代号后加上附加扰码</label>
+		</div>
+		<div class="control-group" id="scramble-field" style="display: none;">
+			<label class="control-label" for="scramble">附加扰码</label>
+			<div class="controls"><input id="scramble" type="text" value="" /></div>
+		</div>
+	</fieldset>
+	<div id="toolbar"><a href="options.html" target="_blank"><img src="img/options.png" />设置</a><a id="hint-shrink"><img src="img/shrink.png" />收起</a><a id="hint-expand"><img src="img/expand.png" />提示</a></div>
+	<ul id="hint">
 		<li>记忆密码：选择一个与个人信息无关的密码，防止社会工程学破解。</li>
 		<li>区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。</li>
 		<li>附加扰码：添加到默认填入的区分代号后面，用于提高默认区分代号的强度。可适当加入分隔符，如“.abc”或“#abc”。</li>
