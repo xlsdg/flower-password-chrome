@@ -27,6 +27,7 @@ function getDefaultKey() {
 
 function fillKey(reset) {
     $("#key").removeClass('last default');
+    $('#key').parents('.control-group').removeClass('warning');
     $("#no-maxlength").hideWithHash();
     if (options.hasLastKey()) {
         var value = options.getLastKey();
@@ -35,6 +36,7 @@ function fillKey(reset) {
         if (options.isFillKeyWithDomain()) {
             var defaultKey = getDefaultKey();
             if (value.length == 15 && defaultKey.length > 15 && defaultKey.indexOf(value) == 0) {
+                $('#key').parents('.control-group').addClass('warning');
                 $("#no-maxlength").showWithHash();
             }
         }
@@ -119,6 +121,7 @@ options.ready = function() {
         }
         if (oldKey != value) {
             e.removeClass('last default');
+            e.parents('.control-group').removeClass('warning');
             $("#no-maxlength").hideWithHash();
             oldKey = value;
         }
@@ -173,6 +176,10 @@ options.ready = function() {
         setupHint();
     });
     setupHint();
+
+    $(document).on('click', '.alert .close', function() {
+        $(this).parent().hideWithHash();
+    });
 
     adjustIframeSize(true);
     messages.page.send('iframeReady');

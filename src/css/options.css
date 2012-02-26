@@ -1,6 +1,4 @@
 body {
-  font: 14px/1.5 Tahoma, Helvetica, Arial, \5b8b\4f53;
-  color: #000;
   text-align: center;
 }
 
@@ -26,35 +24,6 @@ header h1 {
 
 .control-group:first-child {
   margin-top: 18px;
-}
-
-label, input {
-  font-size: 14px;
-}
-
-input {
-  padding: 5px;
-}
-
-.checkbox input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
-  margin: 2px 10px 0 0;
-  border-radius: 3px;
-  -webkit-appearance: none;
-}
-
-.checkbox input[type="checkbox"]:checked:after {
-  content: url(../img/checkmark.png);
-}
-
-.form-horizontal .control-label {
-  width: 70px;
-  padding-top: 6px;
-}
-
-.form-horizontal .controls {
-  margin-left: 80px;
 }
 
 p {

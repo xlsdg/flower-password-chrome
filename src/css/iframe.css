@@ -1,6 +1,4 @@
 body {
-  font: normal 14px/1.5 Tahoma, Helvetica, Arial, \5b8b\4f53;
-  color: #000;
   overflow: hidden;
 }
 
@@ -9,7 +7,7 @@ body {
   padding: 10px;
   border: 2px solid #08C;
   position: relative;
-  *line-height: 1;
+  line-height: 1;
 }
 
 #close {
@@ -56,23 +54,7 @@ h1 {
   margin-bottom: 10px;
 }
 
-.form-horizontal .control-label {
-  width: 60px;
-  padding-top: 6px;
-}
-
-.form-horizontal .controls {
-  margin-left: 70px;
-}
-
-label {
-  font-size: 14px;
-  margin-bottom: 0;
-}
-
 input {
-  font-size: 14px;
-  padding: 5px;
   width: 160px;
 }
 
@@ -84,61 +66,43 @@ input {
   background: #FAFFBD;
 }
 
-.checkbox {
-  padding-left: 10px;
-}
-
-.checkbox input[type="checkbox"] {
-  width: 15px;
-  height: 15px;
-  margin: 2px 10px 0 0;
-  border-radius: 3px;
-  -webkit-appearance: none;
-}
-
-.checkbox input[type="checkbox"]:checked:after {
-  content: url(../img/checkmark.png);
-}
-
 p, ul, li, #toolbar {
   margin: 0;
   font-size: 12px;
   font-family: inherit;
-  line-height: 1.5;
 }
 
-#no-maxlength {
+.alert {
   position: relative;
-  padding-top: 16px;
+  margin: 16px 0 0;
+  padding: 8px;
 }
 
-#no-maxlength-arrow {
+.alert .arrow {
   position: absolute;
-  top:4px;
+  top: -12px;
   left: 180px;
   width: 24px;
   height: 13px;
   overflow: hidden;
 }
 
-#no-maxlength-arrow:after {
+.alert .arrow:after {
   content: "";
   position: absolute;
   left: 3px;
   top: 4px;
   width: 16px;
   height: 16px;
+  background-color: #FCF8E3;
+  border: 1px solid #FBEED5;
   -webkit-transform: rotate(45deg);
 }
 
-#no-maxlength-hint {
-  padding: 8px;
-  border-radius: 3px;
-}
-
-#no-maxlength-arrow:after, #no-maxlength-hint {
-  background: #FEF1B6;
-  border: 1px solid #D7D195;
+.alert .close {
+  right: -2px;
+  top: -6px;
+  font-size: inherit;
 }
 
 a {

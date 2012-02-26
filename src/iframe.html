@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="css/bootstrap.css" />
+<link rel="stylesheet" href="css/custom.css" />
 <link rel="stylesheet" href="css/iframe.css" />
 <script type="text/javascript" src="js/libs/jquery.js"></script>
 <script type="text/javascript" src="js/libs/md5.js"></script>
@@ -26,8 +27,10 @@
 		<div class="control-group">
 			<label class="control-label" for="key">区分代号</label>
 			<div class="controls"><input id="key" type="text" value="" /></div>
-			<div id="no-maxlength" style="display: none;"><span id="no-maxlength-arrow"></span>
-				<div id="no-maxlength-hint">
+			<div id="no-maxlength" class="alert" style="display: none;">
+				<span class="arrow"></span>
+				<a class="close">&times;</a>
+				<div class="content">
 					<p>　旧版花密限制了区分代号的最大长度为15，新版花密已去除此限制，这意味着你可以使用更长更安全的区分代号。</p>
 					<p>　然而，此区分代号是由旧版花密生成的默认区分代号，其长度被限制为15，而由新版生成的默认区分代号则会更长。</p>
 					<p>　一旦您清除了历史记录，新的默认区分代号将导致最终生成的密码发生变化，这将导致您无法登录当前网站！</p>
