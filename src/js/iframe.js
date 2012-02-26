@@ -16,8 +16,9 @@ $.fn.showWithHash = function() {
     location.hash = '#!show:' + getHashIds(this);
 };
 
+var domain = '';
 function getDefaultKey() {
-    var value = options.getDomain();
+    var value = domain;
     if (options.isAppendScramble()) {
         value += options.getScramble();
     }
@@ -57,22 +58,17 @@ function adjustIframeSize(first) {
     messages.page.send('setIframeSize', {width: width, height: height, first: first});
 }
 
-function setupPasswordAndKey() {
-    $('#flower-password-password').val('');
-    fillKey(true);
-}
-
 options.ready = function() {
     if (options.isTransparent()) {
         $('#flower-password-input').focusin(function() {
-            messages.page.send('focusinIframe', {});
+            messages.page.send('focusinIframe');
         }).focusout(function() {
-            messages.page.send('focusoutIframe', {});
+            messages.page.send('focusoutIframe');
         });
     }
 
     $('#flower-password-close').click(function() {
-        messages.page.send('closeIframe', {});
+        messages.page.send('closeIframe');
     });
 
     var mousedownOffset = null;
@@ -179,11 +175,15 @@ options.ready = function() {
     setupHint();
 
     adjustIframeSize(true);
-    setupPasswordAndKey();
+    messages.page.send('iframeReady');
 };
 
 messages.page.handles = $.extend(messages.page.handles, {
-    setupPasswordAndKey: setupPasswordAndKey,
+    setupPasswordAndKey: function(data) {
+        domain = data.domain;
+        $('#flower-password-password').val('');
+        fillKey(true);
+    },
     focusPassword: function() {
         $('#flower-password-password').focus();
     }

@@ -2,12 +2,8 @@ var messages = messages || {};
 
 (function() {
     messages.page = {
-        send: function(action, data, callback) {
-            if (callback) {
-                chrome.extension.sendRequest($.extend({action: action, transit: true}, data), callback);
-            } else {
-                chrome.extension.sendRequest($.extend({action: action, transit: true}, data));
-            }
+        send: function(action, data) {
+            chrome.extension.sendRequest($.extend({action: action, transit: true}, data));
         },
         handles: {}
     };
@@ -15,12 +11,8 @@ var messages = messages || {};
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         var handle = messages.page.handles[request.action];
         if (handle) {
-            var result = handle(request, sender);
-            if (!isUndefined(result)) {
-                sendResponse(result);
-            } else {
-                sendResponse({});
-            }
+            handle(request, sender);
+            sendResponse({});
         }
     });
 })();

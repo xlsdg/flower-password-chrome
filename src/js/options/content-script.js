@@ -16,7 +16,7 @@
             }
         },
         loadAll: function() {
-            messages.extension.send('getGlobalOptions', {}, options.global.setCache);
+            messages.extension.send('getGlobalOptions');
         },
         set: function(name, value) {
             options.global.cache[name] = value;
@@ -46,20 +46,16 @@
         },
         toggleEnabled: function() {
             options.setEnabled(!options.isEnabled());
-        },
-
-        setDomain: function(value) {
-            options.local.cache.domain = value;
         }
     });
 
     messages.extension.handles = $.extend(messages.extension.handles, {
         toggleLocalEnabled: function() {
             options.toggleEnabled();
-            return options.isEnabled();
+            messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
         },
         getLocalEnabled: function() {
-            return options.isEnabled();
+            messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
         },
         setGlobalOptions: function(data) {
             options.global.setCache(data.value);
@@ -67,7 +63,7 @@
     });
     messages.page.handles = $.extend(messages.page.handles, {
         getLocalOptions: function() {
-            return options.local.cache;
+            messages.page.send('setLocalOptions', {value: options.local.cache});
         },
         setLocalOption: function(data) {
             options.local.set(data.name, data.value);

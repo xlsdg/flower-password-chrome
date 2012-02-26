@@ -7,7 +7,7 @@
             }
         },
         loadAll: function() {
-            messages.page.send('getLocalOptions', {}, options.local.setCache);
+            messages.page.send('getLocalOptions');
         },
         set: function(name, value) {
             options.local.cache[name] = value;
@@ -72,10 +72,12 @@
         },
         setShowHint: function(value) {
             options.global.set('showHint', value);
-        },
+        }
+    });
 
-        getDomain: function() {
-            return options.local.cache.domain;
+    messages.page.handles = $.extend(messages.page.handles, {
+        setLocalOptions: function(data) {
+            options.local.setCache(data.value);
         }
     });
 })(options, messages);

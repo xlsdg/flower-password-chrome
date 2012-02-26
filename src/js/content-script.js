@@ -1,4 +1,5 @@
 var dialogOffset = null;
+var currentField = null;
 
 function calculateDialogOffset() {
     var offset = currentField.offset();
@@ -25,14 +26,12 @@ function locateDialog(offset) {
     dialogOffset = offset;
 }
 
-var currentField = null;
-
 function setupInputListeners() {
     if (options.isEnabled()) {
         $(document).on('focus.fp', 'input:password', function() {
             lazyInject();
             if (!currentField || currentField.get(0) != this) {
-                messages.page.send('setupPasswordAndKey', {});
+                messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
             }
             currentField = $(this);
             locateDialog();
@@ -48,7 +47,7 @@ function setupInputListeners() {
             if (e.matchKey(87, {alt: true})) {
                 $('#flower-password-iframe').hide();
             } else if (e.matchKey(83, {alt: true})) {
-                messages.page.send('focusPassword', {});
+                messages.page.send('focusPassword');
             }
         });
         $(window).on('resize.fp', function() {
@@ -69,8 +68,6 @@ function lazyInject() {
         return;
     }
 
-    options.setDomain($.getDomain());
-
     $('body').append('<iframe id="flower-password-iframe" src="' + chrome.extension.getURL('iframe.html') + '" style="display: none;"></iframe>');
     if (options.isTransparent()) {
         $('#flower-password-iframe').addClass('transparent');
@@ -78,6 +75,9 @@ function lazyInject() {
 }
 
 messages.page.handles = $.extend(messages.page.handles, {
+    iframeReady: function() {
+        messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
+    },
     setIframeSize: function(data) {
         $('#flower-password-iframe').width(data.width).height(data.height);
         if (data.first) locateDialog();
