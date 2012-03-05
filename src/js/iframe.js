@@ -1,19 +1,11 @@
-function getHashIds(jObject) {
-    var a = jObject.toArray();
-    $.each(a, function(i, e) {
-        a[i] = e.id;
-    });
-    return a.join('&');
-}
-
-$.fn.hideWithHash = function() {
+$.fn.hideWithNotify = function() {
     this.hide();
-    location.hash = '#!hide:' + getHashIds(this);
+    adjustIframeSize();
 };
 
-$.fn.showWithHash = function() {
+$.fn.showWithNotify = function() {
     this.show();
-    location.hash = '#!show:' + getHashIds(this);
+    adjustIframeSize();
 };
 
 var domain = '';
@@ -28,7 +20,7 @@ function getDefaultKey() {
 function fillKey(reset) {
     $("#key").removeClass('last default');
     $('#key').parents('.control-group').removeClass('warning');
-    $("#no-maxlength").hideWithHash();
+    $("#no-maxlength").hideWithNotify();
     if (options.hasLastKey()) {
         var value = options.getLastKey();
         $("#key").valLimited(value).change().addClass('last');
@@ -37,7 +29,7 @@ function fillKey(reset) {
             var defaultKey = getDefaultKey();
             if (value.length == 15 && defaultKey.length > 15 && defaultKey.indexOf(value) == 0) {
                 $('#key').parents('.control-group').addClass('warning');
-                $("#no-maxlength").showWithHash();
+                $("#no-maxlength").showWithNotify();
             }
         }
 
@@ -122,7 +114,7 @@ options.ready = function() {
         if (oldKey != value) {
             e.removeClass('last default');
             e.parents('.control-group').removeClass('warning');
-            $("#no-maxlength").hideWithHash();
+            $("#no-maxlength").hideWithNotify();
             oldKey = value;
         }
     });
@@ -139,9 +131,9 @@ options.ready = function() {
     var setupScrambleField = function() {
         if (options.isAppendScramble() && options.getScramble() == '') {
             $('#scramble').val(options.getScramble());
-            $('#scramble-field').showWithHash();
+            $('#scramble-field').showWithNotify();
         } else {
-            $('#scramble-field').hideWithHash();
+            $('#scramble-field').hideWithNotify();
         }
     };
     $('#append-scramble').prop("checked", options.isAppendScramble()).change(function(e) {
@@ -160,10 +152,10 @@ options.ready = function() {
     var setupHint = function() {
         $('#hint-shrink, #hint-expand').hide();
         if (options.isShowHint()) {
-            $('#hint').showWithHash();
+            $('#hint').showWithNotify();
             $('#hint-shrink').show();
         } else {
-            $('#hint').hideWithHash();
+            $('#hint').hideWithNotify();
             $('#hint-expand').show();
         }
     }
@@ -178,7 +170,7 @@ options.ready = function() {
     setupHint();
 
     $(document).on('click', '.alert .close', function() {
-        $(this).parent().hideWithHash();
+        $(this).parent().hideWithNotify();
     });
 
     adjustIframeSize(true);
@@ -198,6 +190,4 @@ messages.page.handles = $.extend(messages.page.handles, {
 
 $(window).load(function() {
     options.init();
-}).on('hashchange', function() {
-    adjustIframeSize();
 });
