@@ -75,7 +75,7 @@
         }
     });
 
-    messages.page.handles = $.extend(messages.page.handles, {
+    $.extend(messages.page.handles, {
         setLocalOptions: function(data) {
             options.local.setCache(data.value);
         }

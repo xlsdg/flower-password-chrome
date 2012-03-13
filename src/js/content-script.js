@@ -74,7 +74,7 @@ function lazyInject() {
     }
 }
 
-messages.page.handles = $.extend(messages.page.handles, {
+$.extend(messages.page.handles, {
     iframeReady: function() {
         messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
     },
