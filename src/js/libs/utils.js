@@ -9,6 +9,16 @@ function mergeFuns(firstFun, secondFun) {
     };
 }
 
+(function(win) {
+    var topWindow = win.self === win.top;
+    win.isTopWindow = function() {
+        return topWindow;
+    };
+    win.isIframe = function() {
+        return !topWindow;
+    };
+})(window);
+
 if (typeof jQuery === 'function') {
     (function($) {
         function isModifierSet(modifier, name) {
