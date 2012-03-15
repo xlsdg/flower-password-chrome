@@ -3,7 +3,7 @@
         setCache: function(value) {
             if (!isUndefined(value)) {
                 options.local.cache = value;
-                if (options.ready) options.ready();
+                options.onReady.fireEventOnce();
             }
         },
         loadAll: function() {
@@ -16,7 +16,7 @@
     });
 
     $.extend(options, {
-        ready: null,
+        onReady: new OnEvent(),
 
         isTransparent: function() {
             return options.global.cache.transparent;

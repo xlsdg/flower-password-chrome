@@ -1,6 +1,4 @@
-var options = options || {};
-
-(function() {
+(function(options) {
     var cache = {
         transparent: false,
         saveLastKey: true,
@@ -29,7 +27,7 @@ var options = options || {};
         }
     };
 
-    options.init = mergeFuns(options.init, function() {
+    options.onInit.addListener(function() {
         options.global.loadAll();
     });
-})();
+})(options);

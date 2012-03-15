@@ -48,24 +48,25 @@
     };
 
     function getPadding(element) {
-        var paddingTop = element.style.paddingTop;
-        var paddingLeft = element.style.paddingLeft;
-        paddingTop = (paddingTop === '') ? 0 : parseInt(paddingTop);
-        paddingLeft = (paddingLeft === '') ? 0 : parseInt(paddingLeft);
+        var paddingTop = parseInt(element.style.paddingTop);
+        var paddingLeft = parseInt(element.style.paddingLeft);
+        if (!paddingTop) paddingTop = 0;
+        if (!paddingLeft) paddingLeft = 0;
         return {left: paddingLeft, top: paddingTop};
     }
 
     function findIframe(source) {
-        var iframes = doc.getElementsByTagName('iframe');
-        for (var i = 0; i < iframes.length; ++i) {
-            if (iframes[i].contentWindow === source) {
-                return iframes[i];
-            }
-        }
-        var frames = doc.getElementsByTagName('frame');
-        for (var i = 0; i < frames.length; ++i) {
-            if (frames[i].contentWindow === source) {
-                return frames[i];
+        var iframe = findByTag(source, 'iframe');
+        if (iframe) return iframe;
+        var frame = findByTag(source, 'frame');
+        if (frame) return frame;
+    }
+
+    function findByTag(source, tagName) {
+        var elements = doc.getElementsByTagName(tagName);
+        for (var i = 0; i < elements.length; ++i) {
+            if (elements[i].contentWindow === source) {
+                return elements[i];
             }
         }
     }

@@ -52,7 +52,7 @@ function adjustIframeSize(first) {
     messages.page.send('setIframeSize', {width: width, height: height, first: first});
 }
 
-options.ready = function() {
+options.onReady.addListener(function() {
     if (options.isTransparent()) {
         $('#main').focusin(function() {
             messages.page.send('focusinIframe');
@@ -175,7 +175,7 @@ options.ready = function() {
 
     adjustIframeSize(true);
     messages.page.send('iframeReady');
-};
+});
 
 $.extend(messages.page.handles, {
     setupPasswordAndKey: function(data) {

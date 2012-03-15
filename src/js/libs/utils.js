@@ -9,6 +9,33 @@ function mergeFuns(firstFun, secondFun) {
     };
 }
 
+function OnEvent() {
+    this.listeners = [];
+    this.enabled = true;
+}
+OnEvent.prototype = {
+    addListener: function(listener) {
+        this.listeners.push(listener);
+    },
+    fireEvent: function() {
+        if (this.enabled) {
+            for (var i = 0; i < this.listeners.length; ++i) {
+                this.listeners[i].apply(this, arguments);
+            }
+        }
+    },
+    fireEventOnce: function() {
+        this.fireEvent.apply(this, arguments);
+        this.disable();
+    },
+    disable: function() {
+        this.enabled = false;
+    },
+    enable: function() {
+        this.enabled = true;
+    }
+};
+
 (function(win) {
     var topWindow = win.self === win.top;
     win.isTopWindow = function() {

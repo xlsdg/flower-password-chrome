@@ -1,6 +1,4 @@
-var options = options || {};
-
-(function() {
+(function(options) {
     var cache = {
         enabled: undefined,
         appendScramble: undefined,
@@ -42,7 +40,7 @@ var options = options || {};
         }
     };
 
-    options.init = mergeFuns(options.init, function() {
+    options.onInit.addListener(function() {
         options.local.loadAll();
     });
-})();
+})(options);

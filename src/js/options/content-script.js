@@ -3,16 +3,12 @@
         messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
     }
 
-    function triggerOnSetEnabled() {
-        if (options.onSetEnabled) options.onSetEnabled();
-    }
-
     $.extend(options.global, {
         setCache: function(value) {
             if (!isUndefined(value)) {
                 options.global.cache = value;
+                options.onReady.fireEventOnce();
                 sendEnabled();
-                triggerOnSetEnabled();
             }
         },
         loadAll: function() {
@@ -25,11 +21,13 @@
     });
 
     $.extend(options, {
+        onReady: new OnEvent(),
+
         isTransparent: function() {
             return options.global.cache.transparent;
         },
 
-        onSetEnabled: null,
+        onSetEnabled: new OnEvent(),
         isDefaultEnabled: function() {
             return options.global.cache.defaultEnabled;
         },
@@ -42,7 +40,7 @@
         },
         setEnabled: function(value) {
             options.local.set('enabled', value);
-            triggerOnSetEnabled();
+            options.onSetEnabled.fireEvent();
         },
         toggleEnabled: function() {
             options.setEnabled(!options.isEnabled());

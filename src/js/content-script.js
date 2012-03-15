@@ -1,72 +1,165 @@
-var dialogOffset = null;
-var currentField = null;
-var current = {left: 0, top: 0, width: 0, height: 0};
+var current = {field: null, left: 0, top: 0, width: 0, height: 0};
+var events = {
+    onFocusInPassword: new OnEvent(),
+    onFocusOutPassword: new OnEvent(),
+    onKeyDown: new OnEvent(),
+    onResize: new OnEvent(),
+    onMessage: new OnEvent()
+};
 
-function calculateDialogOffset() {
-    var result;
-    if (current.left - $(document).scrollLeft() + current.width + $('#flower-password-iframe').outerWidth() <= $(window).width()) {
-        result = {left: current.left + current.width, top: current.top};
-    } else {
-        result = {left: current.left, top: current.top + current.height};
-    }
-    return result;
-}
+if (isTopWindow()) {
+    (function() {
+        events.onFocusInPassword.addListener(function(field) {
+            if (!current.field || current.field.get(0) != field) {
+                messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
+            }
+            current.field = $(field);
 
-function locateDialog(offset) {
-    if (!offset) {
-        offset = calculateDialogOffset();
+            var width = current.field.outerWidth();
+            var height = current.field.outerHeight();
+            var offset = current.field.offset();
+            $.extend(current, {left: offset.left, top: offset.top, width: width, height: height});
+            locateDialog();
+
+            $('#flower-password-iframe').show();
+        });
+        events.onResize.addListener(function() {
+            if ($('#flower-password-iframe').is(':visible')) {
+                locateDialog();
+            }
+        });
+        events.onMessage.addListener(function(data) {
+            if (data.action === 'receiveMessage' && data.message === 'showIframe') {
+                $.extend(current,{left: data.left, top: data.top, width: data.width, height: data.height});
+                locateDialog();
+                $('#flower-password-iframe').show();
+            }
+        });
+
+        function calculateDialogOffset() {
+            var result;
+            if (current.left - $(document).scrollLeft() + current.width + $('#flower-password-iframe').outerWidth() <= $(window).width()) {
+                result = {left: current.left + current.width, top: current.top};
+            } else {
+                result = {left: current.left, top: current.top + current.height};
+            }
+            return result;
+        }
+
+        var dialogOffset = null;
+        function locateDialog(offset) {
+            if (!offset) {
+                offset = calculateDialogOffset();
+            }
+            $('#flower-password-iframe').css({left: offset.left + "px", top: offset.top + "px"});
+            dialogOffset = offset;
+        }
+
+        function injectIframe() {
+            if ($('#flower-password-iframe').size() > 0) {
+                return;
+            }
+            $('body').append('<iframe id="flower-password-iframe" src="' + chrome.extension.getURL('iframe.html') + '" style="display: none;"></iframe>');
+            if (options.isTransparent()) {
+                $('#flower-password-iframe').addClass('transparent');
+            }
+        }
+
+        options.onReady.addListener(function() {
+            injectIframe();
+        });
+        options.onSetEnabled.addListener(function() {
+            if (!options.isEnabled()) {
+                messages.page.send('closeIframe');
+            }
+        });
+
+        $.extend(messages.page.handles, {
+            setIframeSize: function(data) {
+                $('#flower-password-iframe').width(data.width).height(data.height);
+                if (data.first) locateDialog();
+            },
+            focusinIframe: function() {
+                $('#flower-password-iframe').addClass('nontransparent');
+            },
+            focusoutIframe: function() {
+                $('#flower-password-iframe').removeClass('nontransparent');
+            },
+            moveIframe: function(data) {
+                locateDialog({left: dialogOffset.left + data.dx, top: dialogOffset.top + data.dy});
+            }
+        });
+    })();
+} // endif (isTopWindow())
+
+if (isIframe()) {
+    (function() {
+        events.onFocusInPassword.addListener(function(field) {
+            if (!current.field || current.field.get(0) != field) {
+                messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
+            }
+            current.field = $(field);
+
+            var width = current.field.outerWidth();
+            var height = current.field.outerHeight();
+            var box = field.getBoundingClientRect();
+            var data = {action: 'startMessage', message: 'showIframe', left: box.left, top: box.top, width: width, height: height};
+            window.postMessage(data, '*');
+        });
+    })();
+} // endif (isIframe())
+
+// commons for top window and iframes
+events.onFocusOutPassword.addListener(function() {
+    messages.page.send('closeIframe');
+});
+events.onKeyDown.addListener(function(e) {
+    if (e.matchKey(87, {alt: true})) {
+        messages.page.send('closeIframe');
+    } else if (e.matchKey(83, {alt: true})) {
+        messages.page.send('focusPassword');
     }
-    $('#flower-password-iframe').css({left: offset.left + "px", top: offset.top + "px"});
-    dialogOffset = offset;
-}
+});
+
+$.extend(messages.page.handles, {
+    // TODO do we need iframeReady?
+    closeIframe: function(data) {
+        if (data.focusCurrentField && current.field) {
+            current.field.focus();
+        }
+        if (isTopWindow()) {
+            $('#flower-password-iframe').hide();
+        }
+        current.field = null;
+    },
+    setCurrentFieldValue: function(data) {
+        if (current.field) {
+            current.field.valLimited(data.value);
+        }
+    }
+});
 
 function setupInputListeners() {
     if (options.isEnabled()) {
         $(document).on('focus.fp', 'input:password', function() {
-            if (!currentField || currentField.get(0) != this) {
-                messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
-            }
-            currentField = $(this);
-
-            var width = currentField.outerWidth();
-            var height = currentField.outerHeight();
-            if (isTopWindow()) {
-                var offset = currentField.offset();
-                current = {left: offset.left, top: offset.top, width: width, height: height};
-                lazyInject();
-                locateDialog();
-                $('#flower-password-iframe').show();
-            } else {
-                var box = this.getBoundingClientRect();
-                var data = {action: 'startMessage', message: 'showIframe', left: box.left, top: box.top, width: width, height: height};
-                window.postMessage(data, '*');
-            }
+            events.onFocusInPassword.fireEvent(this);
         })
         .on('focusin.fp mousedown.fp', function(e) {
-            if (!$('#flower-password-iframe').is(':visible') || $(e.target).is('input:password')) {
-                return;
+            if (!$(e.target).is('input:password')) {
+                events.onFocusOutPassword.fireEvent();
             }
-            $('#flower-password-iframe').hide();
         })
         .on('keydown.fp', function(e) {
-            if (e.matchKey(87, {alt: true})) {
-                $('#flower-password-iframe').hide();
-            } else if (e.matchKey(83, {alt: true})) {
-                messages.page.send('focusPassword');
-            }
+            events.onKeyDown.fireEvent(e);
         });
+
         $(window).on('resize.fp', function() {
-            if ($('#flower-password-iframe').is(':visible')) {
-                locateDialog();
-            }
+            events.onResize.fireEvent();
         })
         .on('message.fp', function(e) {
             var data = e.originalEvent.data;
-            if (typeof data === 'object' && data.action === 'receiveMessage' && data.message === 'showIframe') {
-                current = {left: data.left, top: data.top, width: data.width, height: data.height};
-                lazyInject();
-                locateDialog();
-                $('#flower-password-iframe').show();
+            if (typeof data === 'object') {
+                events.onMessage.fireEvent(data);
             }
         });
 
@@ -76,52 +169,8 @@ function setupInputListeners() {
         $(window).off('.fp');
     }
 }
-
-function lazyInject() {
-    if (!options.isEnabled() || $('#flower-password-iframe').size() > 0) {
-        return;
-    }
-
-    $('body').append('<iframe id="flower-password-iframe" src="' + chrome.extension.getURL('iframe.html') + '" style="display: none;"></iframe>');
-    if (options.isTransparent()) {
-        $('#flower-password-iframe').addClass('transparent');
-    }
-}
-
-$.extend(messages.page.handles, {
-    iframeReady: function() {
-        messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
-    },
-    setIframeSize: function(data) {
-        $('#flower-password-iframe').width(data.width).height(data.height);
-        if (data.first) locateDialog();
-    },
-    closeIframe: function(data) {
-        if (data.focusCurrentField) currentField.focus();
-        $('#flower-password-iframe').hide();
-    },
-    focusinIframe: function() {
-        $('#flower-password-iframe').addClass('nontransparent');
-    },
-    focusoutIframe: function() {
-        $('#flower-password-iframe').removeClass('nontransparent');
-    },
-    setCurrentFieldValue: function(data) {
-        currentField.valLimited(data.value);
-    },
-    moveIframe: function(data) {
-        locateDialog({left: dialogOffset.left + data.dx, top: dialogOffset.top + data.dy});
-    }
-});
-
-options.onSetEnabled = function() {
-    setupInputListeners();
-    if (!options.isEnabled()) {
-        $('#flower-password-iframe').hide();
-    }
-};
-
-options.init(); // options.init() will call options.onSetEnabled()
+options.onReady.addListener(setupInputListeners);
+options.onSetEnabled.addListener(setupInputListeners);
 
 function injectPageScript() {
     var script = document.createElement('script');
@@ -130,3 +179,5 @@ function injectPageScript() {
     document.head.appendChild(script);
 }
 injectPageScript();
+
+options.init();
