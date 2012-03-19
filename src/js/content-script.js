@@ -74,7 +74,11 @@ if (isTopWindow()) {
             }
         });
 
-        $.extend(messages.page.handles, {
+        $.extend(messages.page.handlers, {
+            closeIframe: function(data) {
+                $('#flower-password-iframe').hide();
+                messages.page.send('iframeClosed', {focusCurrentField: data.focusCurrentField});
+            },
             setIframeSize: function(data) {
                 $('#flower-password-iframe').width(data.width).height(data.height);
                 if (data.first) locateDialog();
@@ -103,81 +107,82 @@ if (isIframe()) {
             var width = current.field.outerWidth();
             var height = current.field.outerHeight();
             var box = field.getBoundingClientRect();
-            var data = {action: 'startMessage', message: 'showIframe', left: box.left, top: box.top, width: width, height: height};
+            var data = {flowerPassword: true, action: 'startMessage', message: 'showIframe', left: box.left, top: box.top, width: width, height: height};
             window.postMessage(data, '*');
         });
     })();
 } // endif (isIframe())
 
 // commons for top window and iframes
-events.onFocusOutPassword.addListener(function() {
-    messages.page.send('closeIframe');
-});
-events.onKeyDown.addListener(function(e) {
-    if (e.matchKey(87, {alt: true})) {
+(function() {
+    events.onFocusOutPassword.addListener(function() {
         messages.page.send('closeIframe');
-    } else if (e.matchKey(83, {alt: true})) {
-        messages.page.send('focusPassword');
-    }
-});
+    });
+    events.onKeyDown.addListener(function(e) {
+        if (e.matchKey(87, {alt: true})) {
+            messages.page.send('closeIframe');
+        } else if (e.matchKey(83, {alt: true})) {
+            messages.page.send('focusPassword');
+        }
+    });
 
-$.extend(messages.page.handles, {
-    // TODO do we need iframeReady?
-    closeIframe: function(data) {
-        if (data.focusCurrentField && current.field) {
-            current.field.focus();
-        }
-        if (isTopWindow()) {
-            $('#flower-password-iframe').hide();
-        }
-        current.field = null;
-    },
-    setCurrentFieldValue: function(data) {
-        if (current.field) {
-            current.field.valLimited(data.value);
-        }
-    }
-});
-
-function setupInputListeners() {
-    if (options.isEnabled()) {
-        $(document).on('focus.fp', 'input:password', function() {
-            events.onFocusInPassword.fireEvent(this);
-        })
-        .on('focusin.fp mousedown.fp', function(e) {
-            if (!$(e.target).is('input:password')) {
-                events.onFocusOutPassword.fireEvent();
+    $.extend(messages.page.handlers, {
+        // TODO do we need iframeReady?
+        iframeClosed: function(data) {
+            if (data.focusCurrentField && current.field) {
+                events.onFocusInPassword.disable();
+                current.field.focus();
+                events.onFocusInPassword.enable();
             }
-        })
-        .on('keydown.fp', function(e) {
-            events.onKeyDown.fireEvent(e);
-        });
-
-        $(window).on('resize.fp', function() {
-            events.onResize.fireEvent();
-        })
-        .on('message.fp', function(e) {
-            var data = e.originalEvent.data;
-            if (typeof data === 'object') {
-                events.onMessage.fireEvent(data);
+            current.field = null;
+        },
+        setCurrentFieldValue: function(data) {
+            if (current.field) {
+                current.field.valLimited(data.value);
             }
-        });
+        }
+    });
 
-        $('input:password:focus').focus();
-    } else {
-        $(document).off('.fp');
-        $(window).off('.fp');
+    function setupInputListeners() {
+        if (options.isEnabled()) {
+            $(document).on('focus.fp', 'input:password', function() {
+                events.onFocusInPassword.fireEvent(this);
+            })
+            .on('focusin.fp mousedown.fp', function(e) {
+                if (!$(e.target).is('input:password')) {
+                    events.onFocusOutPassword.fireEvent();
+                }
+            })
+            .on('keydown.fp', function(e) {
+                events.onKeyDown.fireEvent(e);
+            });
+
+            $(window).on('resize.fp', function() {
+                events.onResize.fireEvent();
+            })
+            .on('message.fp', function(e) {
+                var data = e.originalEvent.data;
+                if (typeof data === 'object' && data.flowerPassword) {
+                    events.onMessage.fireEvent(data);
+                }
+            });
+
+            $('input:password:focus').focus();
+        } else {
+            $(document).off('.fp');
+            $(window).off('.fp');
+        }
     }
-}
-options.onReady.addListener(setupInputListeners);
-options.onSetEnabled.addListener(setupInputListeners);
+    options.onReady.addListener(setupInputListeners);
+    options.onSetEnabled.addListener(setupInputListeners);
 
-function injectPageScript() {
-    var script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.setAttribute('src', chrome.extension.getURL('js/page.js'));
-    document.head.appendChild(script);
-}
-injectPageScript();
+    function injectPageScript() {
+        var script = document.createElement('script');
+        script.setAttribute('type', 'text/javascript');
+        script.setAttribute('src', chrome.extension.getURL('js/page.js'));
+        document.head.appendChild(script);
+    }
+    injectPageScript();
 
-options.init();
+    options.init();
+})();

@@ -177,7 +177,7 @@ options.onReady.addListener(function() {
     messages.page.send('iframeReady');
 });
 
-$.extend(messages.page.handles, {
+$.extend(messages.page.handlers, {
     setupPasswordAndKey: function(data) {
         domain = data.domain;
         $('#password').val('');

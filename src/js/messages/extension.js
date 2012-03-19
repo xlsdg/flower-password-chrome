@@ -5,11 +5,11 @@ var messages = messages || {};
         send: function(action, data) {
             chrome.extension.sendRequest($.extend({action: action}, data));
         },
-        handles: {}
+        handlers: {}
     };
 
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-        var handle = messages.extension.handles[request.action];
+        var handle = messages.extension.handlers[request.action];
         if (handle) {
             handle(request, sender);
             sendResponse({});

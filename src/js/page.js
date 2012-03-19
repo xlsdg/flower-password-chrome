@@ -1,7 +1,7 @@
 (function(win, doc) {
     win.addEventListener('message', function(e) {
         var data = e.data;
-        if (typeof data === 'object') {
+        if (typeof data === 'object' && data.flowerPassword) {
             var actionHandler = handlers[data.action];
             if (actionHandler) {
                 var messageHandler = actionHandler[data.message];

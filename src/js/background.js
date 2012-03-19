@@ -46,7 +46,7 @@ function setPageEnabled(tab, value) {
 }
 
 function attachListeners() {
-    $.extend(messages.extension.handles, {
+    $.extend(messages.extension.handlers, {
         getGlobalOptions: function(data, sender) {
             chrome.tabs.sendRequest(sender.tab.id, {action: 'setGlobalOptions', value: options.global.cache});
         },

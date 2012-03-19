@@ -47,7 +47,7 @@
         }
     });
 
-    $.extend(messages.extension.handles, {
+    $.extend(messages.extension.handlers, {
         toggleLocalEnabled: function() {
             options.toggleEnabled();
             messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
@@ -59,7 +59,7 @@
             options.global.setCache(data.value);
         }
     });
-    $.extend(messages.page.handles, {
+    $.extend(messages.page.handlers, {
         getLocalOptions: function() {
             messages.page.send('setLocalOptions', {value: options.local.cache});
         },
