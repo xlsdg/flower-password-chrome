@@ -18,15 +18,19 @@
 </head>
 <body>
 <div id="main">
-	<span id="close" title="关闭">关闭</span>
-	<h1><span id="title">花密 Flower Password</span> <a href="http://flowerpassword.com/" target="_blank"><img src="img/goto.png" title="打开花密官网" /></a></h1>
+	<span id="close" title="关闭 (全局：Alt+W，本窗口内：Enter或Esc)">关闭</span>
+	<h1><span id="title">花密 Flower Password</span></h1>
 	<fieldset class="form-horizontal">
 		<div class="control-group">
-			<label class="control-label" for="password">记忆密码</label>
-			<div class="controls"><input id="password" type="password" value="" /></div>
+			<label class="control-label" for="password">
+				<span class="help" title="选择一个与个人信息无关的密码，防止社会工程学破解">记忆密码</span>
+			</label>
+			<div class="controls"><input id="password" type="password" value="" placeholder="快捷键：Alt+S" /></div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="key">区分代号</label>
+			<label class="control-label" for="key">
+				<span class="help" title="用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等">区分代号</span>
+			</label>
 			<div class="controls"><input id="key" type="text" value="" /></div>
 			<div id="no-maxlength" class="alert" style="display: none;">
 				<span class="arrow"></span>
@@ -43,20 +47,16 @@
 			<label class="checkbox"><input id="fill-key" type="checkbox" />默认将网站域名填入区分代号</label>
 		</div>
 		<div class="control-group" title="只对本网站有效">
-			<label class="checkbox"><input id="append-scramble" type="checkbox" />在默认区分代号后加上附加扰码</label>
+			<label class="checkbox"><input id="append-scramble" type="checkbox" />在默认区分代号后加上<span class="help" title="添加到默认填入的区分代号后面，用于提高默认区分代号的强度，可适当加入分隔符，如“.abc”或“#abc”">附加扰码</span></label>
 		</div>
 		<div class="control-group" id="scramble-field" style="display: none;">
-			<label class="control-label" for="scramble">附加扰码</label>
+			<label class="control-label" for="scramble">
+				<span class="help" title="添加到默认填入的区分代号后面，用于提高默认区分代号的强度，可适当加入分隔符，如“.abc”或“#abc”">附加扰码</span>
+			</label>
 			<div class="controls"><input id="scramble" type="text" value="" /></div>
 		</div>
 	</fieldset>
-	<div id="toolbar"><a href="options.html" target="_blank"><img src="img/options.png" />设置</a><a id="hint-shrink"><img src="img/shrink.png" />收起</a><a id="hint-expand" style="display: none;"><img src="img/expand.png" />提示</a></div>
-	<ul id="hint">
-		<li>记忆密码：选择一个与个人信息无关的密码，防止社会工程学破解。</li>
-		<li>区分代号：用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等。</li>
-		<li>附加扰码：添加到默认填入的区分代号后面，用于提高默认区分代号的强度。可适当加入分隔符，如“.abc”或“#abc”。</li>
-		<li>快捷键：Alt+S聚焦到记忆密码输入框；在页面任意地方按Alt+W，或者在上面两输入框中按Enter或Esc将关闭本窗口。</li>
-	</ul>
+	<div id="toolbar"><a href="options.html" target="_blank"><img src="img/options.png" />设置</a><a href="http://flowerpassword.com/" target="_blank"><img src="img/goto.png" />官网</a></div>
 </div>
 </body>
 </html>

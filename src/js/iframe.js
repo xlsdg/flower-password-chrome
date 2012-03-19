@@ -149,26 +149,6 @@ options.onReady.addListener(function() {
     };
     $('#scramble').change(onScrambleChange).keyup(onScrambleChange);
 
-    var setupHint = function() {
-        $('#hint-shrink, #hint-expand').hide();
-        if (options.isShowHint()) {
-            $('#hint').showWithNotify();
-            $('#hint-shrink').show();
-        } else {
-            $('#hint').hideWithNotify();
-            $('#hint-expand').show();
-        }
-    }
-    $('#hint-expand').click(function() {
-        options.setShowHint(true);
-        setupHint();
-    });
-    $('#hint-shrink').click(function() {
-        options.setShowHint(false);
-        setupHint();
-    });
-    setupHint();
-
     $(document).on('click', '.alert .close', function() {
         $(this).parent().hideWithNotify();
     });

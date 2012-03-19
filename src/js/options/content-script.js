@@ -1,14 +1,10 @@
 (function(options, messages) {
-    function sendEnabled() {
-        messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
-    }
-
     $.extend(options.global, {
         setCache: function(value) {
             if (!isUndefined(value)) {
                 options.global.cache = value;
                 options.onReady.fireEventOnce();
-                sendEnabled();
+                messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
             }
         },
         loadAll: function() {
@@ -16,7 +12,7 @@
         },
         set: function(name, value) {
             options.global.cache[name] = value;
-            messages.extension.send('setGlobalOption',{ name: name, value: value});
+            messages.extension.send('setGlobalOption', {name: name, value: value});
         }
     });
 

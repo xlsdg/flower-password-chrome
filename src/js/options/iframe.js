@@ -65,13 +65,6 @@
         },
         setScramble: function(value) {
             options.global.set('scramble', value);
-        },
-
-        isShowHint: function() {
-            return options.global.cache.showHint;
-        },
-        setShowHint: function(value) {
-            options.global.set('showHint', value);
         }
     });
 

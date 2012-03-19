@@ -3,7 +3,6 @@
         transparent: false,
         saveLastKey: true,
         fillKeyWithDomain: true,
-        showHint: true,
         defaultEnabled: true,
         defaultAppendScramble: false,
         scramble: ''
