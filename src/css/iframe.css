@@ -35,14 +35,7 @@ body {
   top: -1px;
 }
 
-h1 {
-  line-height: 1;
-  font-size: 20px;
-  font-weight: bold;
-}
-
 #title {
-  color: #08C;
   cursor: move;
 }
 
