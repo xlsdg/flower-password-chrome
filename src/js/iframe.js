@@ -1,11 +1,15 @@
 $.fn.hideWithNotify = function() {
-    this.hide();
-    adjustIframeSize();
+    if (this.is(':visible')) {
+        this.hide();
+        adjustIframeSize();
+    }
 };
 
 $.fn.showWithNotify = function() {
-    this.show();
-    adjustIframeSize();
+    if (!this.is(':visible')) {
+        this.show();
+        adjustIframeSize();
+    }
 };
 
 var domain = '';
@@ -46,11 +50,20 @@ function fillDefaultKey() {
     fillKey();
 }
 
-function adjustIframeSize(first) {
+function adjustIframeSize(locate) {
     var width = $('#main').outerWidth();
     var height = $('#main').outerHeight();
-    messages.page.send('setIframeSize', {width: width, height: height, first: first});
+    messages.page.send('setIframeSize', {width: width, height: height, locate: locate});
 }
+
+function setupScrambleField() {
+    if (options.isAppendScramble() && options.getScramble() == '') {
+        $('#scramble').val(options.getScramble());
+        $('#scramble-field').showWithNotify();
+    } else {
+        $('#scramble-field').hideWithNotify();
+    }
+};
 
 options.onReady.addListener(function() {
     if (options.isTransparent()) {
@@ -128,20 +141,11 @@ options.onReady.addListener(function() {
         fillDefaultKey();
     });
 
-    var setupScrambleField = function() {
-        if (options.isAppendScramble() && options.getScramble() == '') {
-            $('#scramble').val(options.getScramble());
-            $('#scramble-field').showWithNotify();
-        } else {
-            $('#scramble-field').hideWithNotify();
-        }
-    };
-    $('#append-scramble').prop("checked", options.isAppendScramble()).change(function(e) {
+    $('#append-scramble').change(function(e) {
         options.setAppendScramble(this.checked);
         fillDefaultKey();
         setupScrambleField();
     });
-    setupScrambleField();
 
     var onScrambleChange = function() {
         options.setScramble(this.value);
@@ -153,13 +157,17 @@ options.onReady.addListener(function() {
         $(this).parent().hideWithNotify();
     });
 
-    adjustIframeSize(true);
     messages.page.send('iframeReady');
 });
 
 $.extend(messages.page.handlers, {
     setupIframe: function(data) {
+        options.local.cache = data.options;
         domain = data.domain;
+
+        $('#append-scramble').prop("checked", options.isAppendScramble());
+        setupScrambleField();
+
         $('#password').val('');
         fillKey(true);
     },
@@ -168,6 +176,8 @@ $.extend(messages.page.handlers, {
     }
 });
 
-$(window).load(function() {
+$(window).ready(function() {
     options.init();
+}).load(function() {
+    adjustIframeSize(true);
 });

@@ -38,14 +38,16 @@ function setupListeners() {
     }
 }
 
+events.onFocusInPassword.addListener(function(field) {
+    if (!current.field || current.field[0] !== field) {
+        messages.page.send('setupIframe', {options: options.local.cache, domain: $.getDomain()});
+    }
+    current.field = $(field);
+});
+
 if (isTopWindow()) {
     (function() {
-        events.onFocusInPassword.addListener(function(field) {
-            if (!current.field || current.field.get(0) != field) {
-                messages.page.send('setupIframe', {domain: $.getDomain()});
-            }
-            current.field = $(field);
-
+        events.onFocusInPassword.addListener(function() {
             var width = current.field.outerWidth();
             var height = current.field.outerHeight();
             var offset = current.field.offset();
@@ -118,7 +120,7 @@ if (isTopWindow()) {
             },
             setIframeSize: function(data) {
                 $('#flower-password-iframe').width(data.width).height(data.height);
-                if (data.first) locateDialog();
+                if (data.locate) locateDialog();
             },
             focusinIframe: function() {
                 $('#flower-password-iframe').addClass('nontransparent');
@@ -135,15 +137,10 @@ if (isTopWindow()) {
 
 if (isIframe()) {
     (function() {
-        events.onFocusInPassword.addListener(function(field) {
-            if (!current.field || current.field.get(0) != field) {
-                messages.page.send('setupIframe', {domain: $.getDomain()});
-            }
-            current.field = $(field);
-
+        events.onFocusInPassword.addListener(function() {
             var width = current.field.outerWidth();
             var height = current.field.outerHeight();
-            var box = field.getBoundingClientRect();
+            var box = current.field[0].getBoundingClientRect();
             var data = {flowerPassword: true, action: 'startMessage', message: 'showIframe', left: box.left, top: box.top, width: width, height: height};
             window.postMessage(data, '*');
         });

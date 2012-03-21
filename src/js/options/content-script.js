@@ -103,11 +103,10 @@
 
     // commons for top window and iframes
     $.extend(messages.page.handlers, {
-        getLocalOptions: function() { // TODO remove this handler
-            messages.page.send('setLocalOptions', {value: options.local.cache});
-        },
         setLocalOption: function(data) {
-            options.local.set(data.name, data.value);
+            if (current.field) {
+                options.local.set(data.name, data.value);
+            }
         }
     });
 })(options, messages);

@@ -1,13 +1,7 @@
 (function(options, messages) {
     $.extend(options.local, {
-        setCache: function(value) {
-            if (!isUndefined(value)) {
-                options.local.cache = value;
-                options.onReady.fireEventOnce();
-            }
-        },
         loadAll: function() {
-            messages.page.send('getLocalOptions');
+            options.onReady.fireEventOnce();
         },
         set: function(name, value) {
             options.local.cache[name] = value;
@@ -65,12 +59,6 @@
         },
         setScramble: function(value) {
             options.global.set('scramble', value);
-        }
-    });
-
-    $.extend(messages.page.handlers, {
-        setLocalOptions: function(data) {
-            options.local.setCache(data.value);
         }
     });
 })(options, messages);
