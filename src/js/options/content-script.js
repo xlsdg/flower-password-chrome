@@ -17,9 +17,8 @@
         });
 
         $.extend(options, {
-            readyConditions: new Conditions('options'),
-
             onReady: new OnEvent(),
+            onIframeReady: new OnEvent(),
 
             isTransparent: function() {
                 return options.global.cache.transparent;
@@ -44,10 +43,7 @@
                 options.setEnabled(!options.isEnabled());
             }
         });
-        options.onReady.addListener(function() {
-            options.readyConditions.satisfy('options');
-        });
-        options.readyConditions.onAllSatisfied.addListener(function() {
+        options.onIframeReady.addListener(function() {
             messages.all.send('setLocalEnabled', {value: options.isEnabled()});
         });
 
@@ -66,7 +62,7 @@
 
         $.extend(messages.page.handlers, {
             getLocalEnabled: function(data) {
-                if (options.readyConditions.isAllSatisfied()) {
+                if (options.onIframeReady.fired) {
                     messages.page.send('setLocalEnabled', {value: options.isEnabled(), to: data.from});
                 }
             }

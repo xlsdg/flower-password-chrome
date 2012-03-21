@@ -47,6 +47,7 @@ if (typeof jQuery === 'function') {
 function OnEvent() {
     this.listeners = [];
     this.enabled = true;
+    this.fired = false;
 }
 OnEvent.prototype = {
     addListener: function(listener) {
@@ -54,6 +55,7 @@ OnEvent.prototype = {
     },
     fireEvent: function() {
         if (this.enabled) {
+            this.fired = true;
             for (var i = 0; i < this.listeners.length; ++i) {
                 this.listeners[i].apply(this, arguments);
             }
@@ -68,30 +70,5 @@ OnEvent.prototype = {
     },
     enable: function() {
         this.enabled = true;
-    }
-};
-
-function Conditions() {
-    this.conditions = [];
-    this.onAllSatisfied = new OnEvent();
-    for (var i = 0; i < arguments.length; ++i) {
-        this.conditions.push(arguments[i]);
-    }
-}
-Conditions.prototype = {
-    addCondition: function(condition) {
-        this.conditions.push(condition);
-    },
-    satisfy: function(condition) {
-        var i = this.conditions.indexOf(condition);
-        if (i >= 0) {
-            this.conditions.splice(i, 1);
-        }
-        if (this.isAllSatisfied()) {
-            this.onAllSatisfied.fireEvent();
-        }
-    },
-    isAllSatisfied: function() {
-        return this.conditions.length == 0;
     }
 };

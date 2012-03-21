@@ -118,9 +118,7 @@ if (isTopWindow()) {
             }
         }
 
-        options.readyConditions.addCondition('iframe');
-        options.readyConditions.onAllSatisfied.addListener(setupListeners);
-
+        options.onIframeReady.addListener(setupListeners);
         options.onReady.addListener(function() {
             injectIframe();
         });
@@ -132,7 +130,7 @@ if (isTopWindow()) {
 
         $.extend(messages.page.handlers, {
             iframeReady: function() {
-                options.readyConditions.satisfy('iframe');
+                options.onIframeReady.fireEventOnce();
             },
             closeIframe: function(data) {
                 $('#flower-password-iframe').hide();
