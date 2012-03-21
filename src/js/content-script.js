@@ -47,25 +47,45 @@ events.onFocusInPassword.addListener(function(field) {
 
 if (isTopWindow()) {
     (function() {
+        function updateCurrentFieldBounds(bounds) {
+            if (isUndefined(bounds)) {
+                var width = current.field.outerWidth();
+                var height = current.field.outerHeight();
+                var offset = current.field.offset();
+                $.extend(current, {left: offset.left, top: offset.top, width: width, height: height});
+            } else {
+                $.extend(current, {left: bounds.left, top: bounds.top, width: bounds.width, height: bounds.height});
+            }
+        }
+
         events.onFocusInPassword.addListener(function() {
-            var width = current.field.outerWidth();
-            var height = current.field.outerHeight();
-            var offset = current.field.offset();
-            $.extend(current, {left: offset.left, top: offset.top, width: width, height: height});
+            updateCurrentFieldBounds();
             locateDialog();
 
             $('#flower-password-iframe').show();
         });
         events.onResize.addListener(function() {
-            if ($('#flower-password-iframe').is(':visible')) {
-                locateDialog();
+            if (current.field) {
+                updateCurrentFieldBounds();
+                if ($('#flower-password-iframe').is(':visible')) {
+                    locateDialog();
+                }
+            } else {
+                messages.page.send('windowResized');
             }
         });
         events.onMessage.addListener(function(data) {
-            if (data.action === 'receiveMessage' && data.message === 'showIframe') {
-                $.extend(current,{left: data.left, top: data.top, width: data.width, height: data.height});
-                locateDialog();
-                $('#flower-password-iframe').show();
+            if (data.action === 'receiveMessage') {
+                updateCurrentFieldBounds(data);
+                if (data.message === 'showIframe') {
+                    locateDialog();
+                    $('#flower-password-iframe').show();
+                }
+                if (data.message === 'locateIframe') {
+                    if ($('#flower-password-iframe').is(':visible')) {
+                        locateDialog();
+                    }
+                }
             }
         });
 
@@ -137,12 +157,25 @@ if (isTopWindow()) {
 
 if (isIframe()) {
     (function() {
-        events.onFocusInPassword.addListener(function() {
+        function getCurrentFieldBounds() {
             var width = current.field.outerWidth();
             var height = current.field.outerHeight();
             var box = current.field[0].getBoundingClientRect();
-            var data = {flowerPassword: true, action: 'startMessage', message: 'showIframe', left: box.left, top: box.top, width: width, height: height};
+            return {left: box.left, top: box.top, width: width, height: height};
+        }
+
+        events.onFocusInPassword.addListener(function() {
+            var data = $.extend({flowerPassword: true, action: 'startMessage', message: 'showIframe'}, getCurrentFieldBounds());
             window.postMessage(data, '*');
+        });
+
+        $.extend(messages.page.handlers, {
+            windowResized: function() {
+                if (current.field) {
+                    var data = $.extend({flowerPassword: true, action: 'startMessage', message: 'locateIframe'}, getCurrentFieldBounds());
+                    window.postMessage(data, '*');
+                }
+            }
         });
     })();
 } // endif (isIframe())
