@@ -9,6 +9,9 @@ var messages = messages || {};
     };
 
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+        if (request.transit) {
+            return;
+        }
         var handle = messages.extension.handlers[request.action];
         if (handle) {
             handle(request, sender);

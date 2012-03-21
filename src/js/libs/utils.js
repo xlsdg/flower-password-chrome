@@ -9,33 +9,6 @@ function mergeFuns(firstFun, secondFun) {
     };
 }
 
-function OnEvent() {
-    this.listeners = [];
-    this.enabled = true;
-}
-OnEvent.prototype = {
-    addListener: function(listener) {
-        this.listeners.push(listener);
-    },
-    fireEvent: function() {
-        if (this.enabled) {
-            for (var i = 0; i < this.listeners.length; ++i) {
-                this.listeners[i].apply(this, arguments);
-            }
-        }
-    },
-    fireEventOnce: function() {
-        this.fireEvent.apply(this, arguments);
-        this.disable();
-    },
-    disable: function() {
-        this.enabled = false;
-    },
-    enable: function() {
-        this.enabled = true;
-    }
-};
-
 (function(win) {
     var topWindow = win.self === win.top;
     win.isTopWindow = function() {
@@ -70,3 +43,55 @@ if (typeof jQuery === 'function') {
         }
     })(jQuery);
 }
+
+function OnEvent() {
+    this.listeners = [];
+    this.enabled = true;
+}
+OnEvent.prototype = {
+    addListener: function(listener) {
+        this.listeners.push(listener);
+    },
+    fireEvent: function() {
+        if (this.enabled) {
+            for (var i = 0; i < this.listeners.length; ++i) {
+                this.listeners[i].apply(this, arguments);
+            }
+        }
+    },
+    fireEventOnce: function() {
+        this.fireEvent.apply(this, arguments);
+        this.disable();
+    },
+    disable: function() {
+        this.enabled = false;
+    },
+    enable: function() {
+        this.enabled = true;
+    }
+};
+
+function Conditions() {
+    this.conditions = [];
+    this.onAllSatisfied = new OnEvent();
+    for (var i = 0; i < arguments.length; ++i) {
+        this.conditions.push(arguments[i]);
+    }
+}
+Conditions.prototype = {
+    addCondition: function(condition) {
+        this.conditions.push(condition);
+    },
+    satisfy: function(condition) {
+        var i = this.conditions.indexOf(condition);
+        if (i >= 0) {
+            this.conditions.splice(i, 1);
+        }
+        if (this.isAllSatisfied()) {
+            this.onAllSatisfied.fireEvent();
+        }
+    },
+    isAllSatisfied: function() {
+        return this.conditions.length == 0;
+    }
+};

@@ -7,11 +7,42 @@ var events = {
     onMessage: new OnEvent()
 };
 
+function setupListeners() {
+    if (options.isEnabled()) {
+        $(document).on('focus.fp', 'input:password', function() {
+            events.onFocusInPassword.fireEvent(this);
+        })
+        .on('focusin.fp mousedown.fp', function(e) {
+            if (!$(e.target).is('input:password')) {
+                events.onFocusOutPassword.fireEvent();
+            }
+        })
+        .on('keydown.fp', function(e) {
+            events.onKeyDown.fireEvent(e);
+        });
+
+        $(window).on('resize.fp', function() {
+            events.onResize.fireEvent();
+        })
+        .on('message.fp', function(e) {
+            var data = e.originalEvent.data;
+            if (typeof data === 'object' && data.flowerPassword) {
+                events.onMessage.fireEvent(data);
+            }
+        });
+
+        $('input:password:focus').focus();
+    } else {
+        $(document).off('.fp');
+        $(window).off('.fp');
+    }
+}
+
 if (isTopWindow()) {
     (function() {
         events.onFocusInPassword.addListener(function(field) {
             if (!current.field || current.field.get(0) != field) {
-                messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
+                messages.page.send('setupIframe', {domain: $.getDomain()});
             }
             current.field = $(field);
 
@@ -65,6 +96,9 @@ if (isTopWindow()) {
             }
         }
 
+        options.readyConditions.addCondition('iframe');
+        options.readyConditions.onAllSatisfied.addListener(setupListeners);
+
         options.onReady.addListener(function() {
             injectIframe();
         });
@@ -75,6 +109,9 @@ if (isTopWindow()) {
         });
 
         $.extend(messages.page.handlers, {
+            iframeReady: function() {
+                options.readyConditions.satisfy('iframe');
+            },
             closeIframe: function(data) {
                 $('#flower-password-iframe').hide();
                 messages.page.send('iframeClosed', {focusCurrentField: data.focusCurrentField});
@@ -100,7 +137,7 @@ if (isIframe()) {
     (function() {
         events.onFocusInPassword.addListener(function(field) {
             if (!current.field || current.field.get(0) != field) {
-                messages.page.send('setupPasswordAndKey', {domain: $.getDomain()});
+                messages.page.send('setupIframe', {domain: $.getDomain()});
             }
             current.field = $(field);
 
@@ -127,7 +164,6 @@ if (isIframe()) {
     });
 
     $.extend(messages.page.handlers, {
-        // TODO do we need iframeReady?
         iframeClosed: function(data) {
             if (data.focusCurrentField && current.field) {
                 events.onFocusInPassword.disable();
@@ -143,38 +179,7 @@ if (isIframe()) {
         }
     });
 
-    function setupInputListeners() {
-        if (options.isEnabled()) {
-            $(document).on('focus.fp', 'input:password', function() {
-                events.onFocusInPassword.fireEvent(this);
-            })
-            .on('focusin.fp mousedown.fp', function(e) {
-                if (!$(e.target).is('input:password')) {
-                    events.onFocusOutPassword.fireEvent();
-                }
-            })
-            .on('keydown.fp', function(e) {
-                events.onKeyDown.fireEvent(e);
-            });
-
-            $(window).on('resize.fp', function() {
-                events.onResize.fireEvent();
-            })
-            .on('message.fp', function(e) {
-                var data = e.originalEvent.data;
-                if (typeof data === 'object' && data.flowerPassword) {
-                    events.onMessage.fireEvent(data);
-                }
-            });
-
-            $('input:password:focus').focus();
-        } else {
-            $(document).off('.fp');
-            $(window).off('.fp');
-        }
-    }
-    options.onReady.addListener(setupInputListeners);
-    options.onSetEnabled.addListener(setupInputListeners);
+    options.onSetEnabled.addListener(setupListeners);
 
     function injectPageScript() {
         var script = document.createElement('script');
