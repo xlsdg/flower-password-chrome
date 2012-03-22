@@ -1,3 +1,6 @@
+// we need this script injected into the page context, because we cannot get
+// contentWindow from iframe, or get parent window inside iframe, in the content
+// script context
 (function(win, doc) {
     win.addEventListener('message', function(e) {
         var data = e.data;
@@ -41,18 +44,13 @@
     };
 
     function getPadding(element) {
-        var paddingTop = parseInt(element.style.paddingTop);
-        var paddingLeft = parseInt(element.style.paddingLeft);
-        if (!paddingTop) paddingTop = 0;
-        if (!paddingLeft) paddingLeft = 0;
+        var paddingTop = parseInt(element.style.paddingTop) || 0;
+        var paddingLeft = parseInt(element.style.paddingLeft) || 0;
         return {left: paddingLeft, top: paddingTop};
     }
 
     function findIframe(source) {
-        var iframe = findByTag(source, 'iframe');
-        if (iframe) return iframe;
-        var frame = findByTag(source, 'frame');
-        if (frame) return frame;
+        return findByTag(source, 'iframe') || findByTag(source, 'frame');
     }
 
     function findByTag(source, tagName) {
