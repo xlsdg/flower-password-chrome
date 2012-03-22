@@ -16,6 +16,10 @@
             return options.global.cache.transparent;
         },
 
+        isCopyToClipboard: function() {
+            return options.global.cache.copyToClipboard;
+        },
+
         hasLastKey: function() {
             return options.global.cache.saveLastKey && !isUndefined(options.local.cache.lastKey);
         },

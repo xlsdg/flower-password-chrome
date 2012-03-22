@@ -58,12 +58,19 @@ function attachListeners() {
         },
         setLocalEnabled: function(data, reply, sender) {
             setPageEnabled(sender.tab, data.value);
+        },
+        copyToClipboard: function(data) {
+            $('#copy-to-clipboard').val(data.value).get(0).select();
+            document.execCommand('copy');
         }
     });
     chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
         if (request.transit) {
             chrome.tabs.sendRequest(sender.tab.id, request, function(response) {
-                sendResponse(response);
+                if (sendResponse) {
+                    sendResponse(response);
+                    sendResponse = null;
+                }
             });
         }
     });

@@ -107,7 +107,10 @@ options.onReady.addListener(function() {
         var key = $("#key").val();
         var result = flowerPassword.encrypt(password, key);
         if (result) {
-            messages.page.broadcast('setCurrentFieldValue', {value: result[0]});
+            messages.page.broadcast('setCurrentFieldValue', {value: result});
+            if (options.isCopyToClipboard()) {
+                messages.extension.send('copyToClipboard', {value: result});
+            }
         }
     }).keyup(function(e) {
         if (e.matchKey(13) || e.matchKey(27)) {

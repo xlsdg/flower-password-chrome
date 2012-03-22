@@ -27,6 +27,9 @@
     }
 
     window.flowerPassword = {
-        encrypt: countCode
+        encrypt: function(password, key) {
+            var result = countCode(password, key);
+            return result && result[0];
+        }
     };
 })();

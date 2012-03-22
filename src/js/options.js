@@ -11,6 +11,9 @@ $(function() {
     $('#transparent').prop("checked", options.global.cache.transparent).change(function() {
         options.global.set('transparent', this.checked);
     });
+    $('#copy-to-clipboard').prop("checked", options.global.cache.copyToClipboard).change(function() {
+        options.global.set('copyToClipboard', this.checked);
+    });
     $('#last-key').prop("checked", options.global.cache.saveLastKey).change(function() {
         options.global.set('saveLastKey', this.checked);
     });

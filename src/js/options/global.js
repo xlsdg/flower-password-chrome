@@ -1,6 +1,7 @@
 (function(options) {
     var cache = {
         transparent: false,
+        copyToClipboard: false,
         saveLastKey: true,
         fillKeyWithDomain: true,
         defaultEnabled: true,
