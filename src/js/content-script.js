@@ -3,9 +3,9 @@ var events = {
     onFocusInPassword: new OnEvent(),
     onFocusOutPassword: new OnEvent(),
     onKeyDown: new OnEvent(),
-    onResize: new OnEvent(),
-    onMessage: new OnEvent()
+    onResize: new OnEvent()
 };
+var showIframe, closeIframe, focusIframe, locateIframe;
 
 function setupListeners() {
     if (options.isEnabled()) {
@@ -23,12 +23,6 @@ function setupListeners() {
 
         $(window).on('resize.fp', function() {
             events.onResize.fireEvent();
-        })
-        .on('message.fp', function(e) {
-            var data = e.originalEvent.data;
-            if (typeof data === 'object' && data.flowerPassword) {
-                events.onMessage.fireEvent(data);
-            }
         });
 
         $('input:password:focus').focus();
@@ -40,7 +34,7 @@ function setupListeners() {
 
 events.onFocusInPassword.addListener(function(field) {
     if (!current.field || current.field[0] !== field) {
-        messages.page.send('setupIframe', {options: options.local.cache, domain: $.getDomain()});
+        messages.page.broadcast('setupIframe', {options: options.local.cache, domain: $.getDomain()});
     }
     current.field = $(field);
 });
@@ -58,34 +52,34 @@ if (isTopWindow()) {
             }
         }
 
-        events.onFocusInPassword.addListener(function() {
-            updateCurrentFieldBounds();
+        showIframe = function(bounds) {
+            updateCurrentFieldBounds(bounds);
             locateDialog();
-
             $('#flower-password-iframe').show();
-        });
+        };
+        closeIframe = function(focusCurrentField) {
+            if ($('#flower-password-iframe').is(':visible')) {
+                $('#flower-password-iframe').hide();
+                messages.page.broadcast('iframeClosed', {focusCurrentField: focusCurrentField});
+            }
+        };
+        focusIframe = function() {
+            if ($('#flower-password-iframe').is(':visible')) {
+                messages.page.broadcast('focusPassword');
+            }
+        };
+        locateIframe = function(bounds) {
+            updateCurrentFieldBounds(bounds);
+            if ($('#flower-password-iframe').is(':visible')) {
+                locateDialog();
+            }
+        };
+
         events.onResize.addListener(function() {
             if (current.field) {
-                updateCurrentFieldBounds();
-                if ($('#flower-password-iframe').is(':visible')) {
-                    locateDialog();
-                }
+                locateIframe();
             } else {
-                messages.page.send('windowResized');
-            }
-        });
-        events.onMessage.addListener(function(data) {
-            if (data.action === 'receiveMessage') {
-                updateCurrentFieldBounds(data);
-                if (data.message === 'showIframe') {
-                    locateDialog();
-                    $('#flower-password-iframe').show();
-                }
-                if (data.message === 'locateIframe') {
-                    if ($('#flower-password-iframe').is(':visible')) {
-                        locateDialog();
-                    }
-                }
+                messages.page.broadcast('windowResized');
             }
         });
 
@@ -124,7 +118,7 @@ if (isTopWindow()) {
         });
         options.onSetEnabled.addListener(function() {
             if (!options.isEnabled()) {
-                messages.page.send('closeIframe');
+                closeIframe();
             }
         });
 
@@ -133,8 +127,7 @@ if (isTopWindow()) {
                 options.onIframeReady.fireEventOnce();
             },
             closeIframe: function(data) {
-                $('#flower-password-iframe').hide();
-                messages.page.send('iframeClosed', {focusCurrentField: data.focusCurrentField});
+                closeIframe(data.focusCurrentField);
             },
             setIframeSize: function(data) {
                 $('#flower-password-iframe').width(data.width).height(data.height);
@@ -148,6 +141,16 @@ if (isTopWindow()) {
             },
             moveIframe: function(data) {
                 locateDialog({left: dialogOffset.left + data.dx, top: dialogOffset.top + data.dy});
+            },
+            focusIframe: function() {
+                focusIframe();
+            },
+            receiveMessage: function(data) {
+                if (data.message === 'showIframe') {
+                    showIframe(data);
+                } else if (data.message === 'locateIframe') {
+                    locateIframe(data);
+                }
             }
         });
     })();
@@ -162,16 +165,23 @@ if (isIframe()) {
             return {left: box.left, top: box.top, width: width, height: height};
         }
 
-        events.onFocusInPassword.addListener(function() {
-            var data = $.extend({flowerPassword: true, action: 'startMessage', message: 'showIframe'}, getCurrentFieldBounds());
-            window.postMessage(data, '*');
-        });
+        showIframe = function() {
+            messages.page.sendTo(window, 'startMessage', $.extend({message: 'showIframe'}, getCurrentFieldBounds()));
+        };
+        closeIframe = function() {
+            messages.page.sendToTop('closeIframe');
+        };
+        focusIframe = function() {
+            messages.page.sendToTop('focusIframe');
+        };
+        locateIframe = function() {
+            messages.page.sendTo(window, 'startMessage', $.extend({message: 'locateIframe'}, getCurrentFieldBounds()));
+        };
 
         $.extend(messages.page.handlers, {
             windowResized: function() {
                 if (current.field) {
-                    var data = $.extend({flowerPassword: true, action: 'startMessage', message: 'locateIframe'}, getCurrentFieldBounds());
-                    window.postMessage(data, '*');
+                    locateIframe();
                 }
             }
         });
@@ -180,14 +190,17 @@ if (isIframe()) {
 
 // commons for top window and iframes
 (function() {
+    events.onFocusInPassword.addListener(function() {
+        showIframe();
+    });
     events.onFocusOutPassword.addListener(function() {
-        messages.page.send('closeIframe');
+        closeIframe();
     });
     events.onKeyDown.addListener(function(e) {
         if (e.matchKey(87, {alt: true})) {
-            messages.page.send('closeIframe');
+            closeIframe();
         } else if (e.matchKey(83, {alt: true})) {
-            messages.page.send('focusPassword');
+            focusIframe();
         }
     });
 

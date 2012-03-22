@@ -5,7 +5,7 @@
         },
         set: function(name, value) {
             options.local.cache[name] = value;
-            messages.page.send('setLocalOption', {name: name, value: value});
+            messages.page.broadcast('setLocalOption', {name: name, value: value});
         }
     });
 

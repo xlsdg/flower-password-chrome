@@ -1,6 +1,6 @@
 // we need this script injected into the page context, because we cannot get
-// contentWindow from iframe, or get parent window inside iframe, in the content
-// script context
+// contentWindow from iframe, nor get parent or top window inside iframe, in the
+// context of content script
 (function(win, doc) {
     win.addEventListener('message', function(e) {
         var data = e.data;

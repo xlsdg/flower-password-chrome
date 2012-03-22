@@ -20,13 +20,13 @@ function showAllPageActions() {
 
 function updatePageAction(tab) {
     chrome.pageAction.hide(tab.id);
-    chrome.tabs.sendRequest(tab.id, {action: 'getLocalEnabled'});
+    messages.extension.sendTo(tab.id, 'getLocalEnabled');
 }
 
 function notifyOptionsChanged() {
     forEachTab(function(tab) {
         chrome.pageAction.hide(tab.id);
-        chrome.tabs.sendRequest(tab.id, {action: 'setGlobalOptions', value: options.global.cache});
+        messages.extension.sendTo(tab.id, 'setGlobalOptions', {value: options.global.cache});
     });
 }
 
@@ -47,8 +47,8 @@ function setPageEnabled(tab, value) {
 
 function attachListeners() {
     $.extend(messages.extension.handlers, {
-        getGlobalOptions: function(data, sender) {
-            chrome.tabs.sendRequest(sender.tab.id, {action: 'setGlobalOptions', value: options.global.cache});
+        getGlobalOptions: function(data, reply) {
+            reply('setGlobalOptions', {value: options.global.cache});
         },
         setGlobalOption: function(data) {
             options.global.set(data.name, data.value);
@@ -56,7 +56,7 @@ function attachListeners() {
                 notifyOptionsChanged();
             }
         },
-        setLocalEnabled: function(data, sender) {
+        setLocalEnabled: function(data, reply, sender) {
             setPageEnabled(sender.tab, data.value);
         }
     });
@@ -73,7 +73,7 @@ function attachListeners() {
         }
     });
     chrome.pageAction.onClicked.addListener(function(tab) {
-        chrome.tabs.sendRequest(tab.id, {action: 'toggleLocalEnabled'});
+        messages.extension.sendTo(tab.id, 'toggleLocalEnabled');
     });
 }
 

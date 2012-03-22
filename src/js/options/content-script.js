@@ -44,26 +44,27 @@
             }
         });
         options.onIframeReady.addListener(function() {
-            messages.all.send('setLocalEnabled', {value: options.isEnabled()});
+            messages.page.broadcast('setLocalEnabled', {value: options.isEnabled()});
         });
 
         $.extend(messages.extension.handlers, {
             toggleLocalEnabled: function() {
                 options.toggleEnabled();
-                messages.all.send('setLocalEnabled', {value: options.isEnabled()});
+                messages.all.broadcast('setLocalEnabled', {value: options.isEnabled()});
             },
-            getLocalEnabled: function() {
-                messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
+            getLocalEnabled: function(data, reply) {
+                reply('setLocalEnabled', {value: options.isEnabled()});
             },
             setGlobalOptions: function(data) {
                 options.global.setCache(data.value);
+                messages.extension.send('setLocalEnabled', {value: options.isEnabled()});
             }
         });
 
         $.extend(messages.page.handlers, {
-            getLocalEnabled: function(data) {
+            getLocalEnabled: function(data, reply) {
                 if (options.onIframeReady.fired) {
-                    messages.page.send('setLocalEnabled', {value: options.isEnabled(), to: data.from});
+                    reply('setLocalEnabled', {value: options.isEnabled()});
                 }
             }
         });
@@ -93,7 +94,7 @@
         });
 
         options.onInit.addListener(function() {
-            messages.page.send('getLocalEnabled');
+            messages.page.sendToTop('getLocalEnabled');
         });
     } // endif (isIframe())
 

@@ -53,7 +53,7 @@ function fillDefaultKey() {
 function adjustIframeSize(locate) {
     var width = $('#main').outerWidth();
     var height = $('#main').outerHeight();
-    messages.page.send('setIframeSize', {width: width, height: height, locate: locate});
+    messages.page.sendToTop('setIframeSize', {width: width, height: height, locate: locate});
 }
 
 function setupScrambleField() {
@@ -68,19 +68,19 @@ function setupScrambleField() {
 options.onReady.addListener(function() {
     if (options.isTransparent()) {
         $('#main').focusin(function() {
-            messages.page.send('focusinIframe');
+            messages.page.sendToTop('focusinIframe');
         }).focusout(function() {
-            messages.page.send('focusoutIframe');
+            messages.page.sendToTop('focusoutIframe');
         });
     }
 
     $('#close').click(function() {
-        messages.page.send('closeIframe');
+        messages.page.sendToTop('closeIframe');
     });
 
     var mousedownOffset = null;
     function moveIframe(e) {
-        messages.page.send('moveIframe', {dx: e.pageX - mousedownOffset.x, dy: e.pageY - mousedownOffset.y});
+        messages.page.sendToTop('moveIframe', {dx: e.pageX - mousedownOffset.x, dy: e.pageY - mousedownOffset.y});
     }
     $('#title').mousedown(function(e) {
         if (e.button == 0) {
@@ -107,11 +107,11 @@ options.onReady.addListener(function() {
         var key = $("#key").val();
         var result = flowerPassword.encrypt(password, key);
         if (result) {
-            messages.page.send('setCurrentFieldValue', {value: result[0]});
+            messages.page.broadcast('setCurrentFieldValue', {value: result[0]});
         }
     }).keyup(function(e) {
         if (e.matchKey(13) || e.matchKey(27)) {
-            messages.page.send('closeIframe', {focusCurrentField: true});
+            messages.page.sendToTop('closeIframe', {focusCurrentField: true});
         } else {
             $(this).change();
         }
@@ -157,7 +157,7 @@ options.onReady.addListener(function() {
         $(this).parent().hideWithNotify();
     });
 
-    messages.page.send('iframeReady');
+    messages.page.sendToTop('iframeReady');
 });
 
 $.extend(messages.page.handlers, {
