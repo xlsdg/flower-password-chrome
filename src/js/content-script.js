@@ -106,7 +106,7 @@ if (isTopWindow()) {
             if ($('#flower-password-iframe').size() > 0) {
                 return;
             }
-            $('body').append('<iframe id="flower-password-iframe" src="' + chrome.extension.getURL('iframe.html') + '" style="display: none;"></iframe>');
+            $('body').append('<iframe id="flower-password-iframe" src="' + getURL('iframe.html') + '" style="display: none;"></iframe>');
             if (options.isTransparent()) {
                 $('#flower-password-iframe').addClass('transparent');
             }
@@ -225,7 +225,7 @@ if (isIframe()) {
     function injectPageScript() {
         var script = document.createElement('script');
         script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', chrome.extension.getURL('js/page.js'));
+        script.setAttribute('src', getURL('js/page.js'));
         document.head.appendChild(script);
     }
     injectPageScript();
