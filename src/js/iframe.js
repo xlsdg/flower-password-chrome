@@ -123,6 +123,7 @@ options.onReady.addListener(function() {
     $('#password').change(function() {
         if (options.isCheckPasswordStrength()) {
             var e = $(this);
+            e.prop('title', '');
             e.parents('.control-group').removeClass('error info success');
             $('#password-strength').removeClass('alert-error alert-info').hideAndNotify();
             var password = e.val();
