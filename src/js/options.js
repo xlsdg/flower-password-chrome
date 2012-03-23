@@ -8,6 +8,9 @@ $(function() {
     $('#default-enabled').prop("checked", options.global.cache.defaultEnabled).change(function() {
         options.global.set('defaultEnabled', this.checked);
     });
+    $('#password-strength').prop("checked", options.global.cache.checkPasswordStrength).change(function() {
+        options.global.set('checkPasswordStrength', this.checked);
+    });
     $('#transparent').prop("checked", options.global.cache.transparent).change(function() {
         options.global.set('transparent', this.checked);
     });

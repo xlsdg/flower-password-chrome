@@ -1,5 +1,6 @@
 (function(options) {
     var cache = {
+        checkPasswordStrength: true,
         transparent: false,
         copyToClipboard: false,
         saveLastKey: true,

@@ -12,6 +12,10 @@
     $.extend(options, {
         onReady: new OnEvent(),
 
+        isCheckPasswordStrength: function() {
+            return options.global.cache.checkPasswordStrength;
+        },
+
         isTransparent: function() {
             return options.global.cache.transparent;
         },

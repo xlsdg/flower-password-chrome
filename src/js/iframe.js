@@ -121,34 +121,36 @@ options.onReady.addListener(function() {
     });
 
     $('#password').change(function() {
-        var e = $(this);
-        e.parents('.control-group').removeClass('error info success');
-        $('#password-strength').removeClass('alert-error alert-info').hideAndNotify();
-        var password = e.val();
-        if (password) {
-            var result = hsimp.check(password);
+        if (options.isCheckPasswordStrength()) {
+            var e = $(this);
+            e.parents('.control-group').removeClass('error info success');
+            $('#password-strength').removeClass('alert-error alert-info').hideAndNotify();
+            var password = e.val();
+            if (password) {
+                var result = hsimp.check(password);
 
-            var messages = '';
-            for (var i = 0; i < result.messages.length; ++i) {
-                messages += '<li>' + result.messages[i] + '</li>';
-            }
-            $('#password-strength .message-list').html(messages);
+                var messages = '';
+                for (var i = 0; i < result.messages.length; ++i) {
+                    messages += '<li>' + result.messages[i] + '</li>';
+                }
+                $('#password-strength .message-list').html(messages);
 
-            if (result.level === hsimp.levels.weak) {
-                e.prop('title', '密码强度：弱');
-                $('#password-strength .level').html('密码强度：弱');
-                e.parents('.control-group').addClass('error');
-                $('#password-strength').addClass('alert-error').showAndNotify();
-            }
-            if (result.level === hsimp.levels.normal) {
-                e.prop('title', '密码强度：一般');
-                $('#password-strength .level').html('密码强度：一般');
-                e.parents('.control-group').addClass('info');
-                $('#password-strength').addClass('alert-info').showAndNotify();
-            }
-            if (result.level === hsimp.levels.strong) {
-                e.prop('title', '密码强度：强');
-                e.parents('.control-group').addClass('success');
+                if (result.level === hsimp.levels.weak) {
+                    e.prop('title', '密码强度：弱');
+                    $('#password-strength .level').html('密码强度：弱');
+                    e.parents('.control-group').addClass('error');
+                    $('#password-strength').addClass('alert-error').showAndNotify();
+                }
+                if (result.level === hsimp.levels.normal) {
+                    e.prop('title', '密码强度：一般');
+                    $('#password-strength .level').html('密码强度：一般');
+                    e.parents('.control-group').addClass('info');
+                    $('#password-strength').addClass('alert-info').showAndNotify();
+                }
+                if (result.level === hsimp.levels.strong) {
+                    e.prop('title', '密码强度：强');
+                    e.parents('.control-group').addClass('success');
+                }
             }
         }
     });
@@ -204,7 +206,7 @@ $.extend(messages.page.handlers, {
         $('#append-scramble').prop("checked", options.isAppendScramble());
         setupScrambleField();
 
-        $('#password').val('');
+        $('#password').val('').change();
         fillKey(true);
     },
     focusPassword: function() {
