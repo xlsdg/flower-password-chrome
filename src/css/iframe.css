@@ -47,6 +47,23 @@ body {
   margin-bottom: 10px;
 }
 
+.control-group.info > label,
+.control-group.info .help-block,
+.control-group.info .help-inline {
+  color: #3a87ad;
+}
+.control-group.info input,
+.control-group.info select,
+.control-group.info textarea {
+  color: #3a87ad;
+  border-color: #3a87ad;
+}
+.control-group.info input:focus,
+.control-group.info select:focus,
+.control-group.info textarea:focus {
+  border-color: #2d6987;
+}
+
 input {
   width: 160px;
 }
@@ -92,10 +109,34 @@ p, ul, li, #toolbar {
   -webkit-transform: rotate(45deg);
 }
 
+.alert-error .arrow:after {
+  background-color: #F2DEDE;
+  border-color: #EED3D7;
+}
+
+.alert-info .arrow:after {
+  background-color: #D9EDF7;
+  border-color: #BCE8F1;
+}
+
+.alert-success .arrow:after {
+  background-color: #DFF0D8;
+  border-color: #D6E9C6;
+}
+
 .alert .close {
   right: -2px;
   top: -6px;
   font-size: inherit;
+}
+
+.alert-heading {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.alert .message-list {
+  list-style-position: inside;
 }
 
 a {

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -9,6 +9,8 @@
 <script type="text/javascript" src="js/libs/md5.js"></script>
 <script type="text/javascript" src="js/libs/utils.js"></script>
 <script type="text/javascript" src="js/core/flower-password.js"></script>
+<script type="text/javascript" src="js/core/hsimp.js"></script>
+<script type="text/javascript" src="js/core/hsimp.cp.js"></script>
 <script type="text/javascript" src="js/chrome/messages.js"></script>
 <script type="text/javascript" src="js/options/base.js"></script>
 <script type="text/javascript" src="js/options/global.js"></script>
@@ -26,6 +28,14 @@
 				<span class="help" title="选择一个与个人信息无关的密码，防止社会工程学破解">记忆密码</span>
 			</label>
 			<div class="controls"><input id="password" type="password" value="" placeholder="快捷键：Alt+S" /></div>
+			<div id="password-strength" class="alert" style="display: none;">
+				<span class="arrow"></span>
+				<a class="close">&times;</a>
+				<div class="content">
+					<strong class="alert-heading level"></strong>
+					<ul class="message-list"></ul>
+				</div>
+			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label" for="key">

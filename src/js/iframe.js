@@ -1,11 +1,11 @@
-$.fn.hideWithNotify = function() {
+$.fn.hideAndNotify = function() {
     if (this.is(':visible')) {
         this.hide();
         adjustIframeSize();
     }
 };
 
-$.fn.showWithNotify = function() {
+$.fn.showAndNotify = function() {
     if (!this.is(':visible')) {
         this.show();
         adjustIframeSize();
@@ -24,7 +24,7 @@ function getDefaultKey() {
 function fillKey(reset) {
     $("#key").removeClass('last default');
     $('#key').parents('.control-group').removeClass('warning');
-    $("#no-maxlength").hideWithNotify();
+    $("#no-maxlength").hideAndNotify();
     if (options.hasLastKey()) {
         var value = options.getLastKey();
         $("#key").valLimited(value).change().addClass('last');
@@ -33,7 +33,7 @@ function fillKey(reset) {
             var defaultKey = getDefaultKey();
             if (value.length == 15 && defaultKey.length > 15 && defaultKey.indexOf(value) == 0) {
                 $('#key').parents('.control-group').addClass('warning');
-                $("#no-maxlength").showWithNotify();
+                $("#no-maxlength").showAndNotify();
             }
         }
 
@@ -59,9 +59,9 @@ function adjustIframeSize(locate) {
 function setupScrambleField() {
     if (options.isAppendScramble() && options.getScramble() == '') {
         $('#scramble').val(options.getScramble());
-        $('#scramble-field').showWithNotify();
+        $('#scramble-field').showAndNotify();
     } else {
-        $('#scramble-field').hideWithNotify();
+        $('#scramble-field').hideAndNotify();
     }
 };
 
@@ -120,6 +120,39 @@ options.onReady.addListener(function() {
         }
     });
 
+    $('#password').change(function() {
+        var e = $(this);
+        e.parents('.control-group').removeClass('error info success');
+        $('#password-strength').removeClass('alert-error alert-info').hideAndNotify();
+        var password = e.val();
+        if (password) {
+            var result = hsimp.check(password);
+
+            var messages = '';
+            for (var i = 0; i < result.messages.length; ++i) {
+                messages += '<li>' + result.messages[i] + '</li>';
+            }
+            $('#password-strength .message-list').html(messages);
+
+            if (result.level === hsimp.levels.weak) {
+                e.prop('title', '密码强度：弱');
+                $('#password-strength .level').html('密码强度：弱');
+                e.parents('.control-group').addClass('error');
+                $('#password-strength').addClass('alert-error').showAndNotify();
+            }
+            if (result.level === hsimp.levels.normal) {
+                e.prop('title', '密码强度：一般');
+                $('#password-strength .level').html('密码强度：一般');
+                e.parents('.control-group').addClass('info');
+                $('#password-strength').addClass('alert-info').showAndNotify();
+            }
+            if (result.level === hsimp.levels.strong) {
+                e.prop('title', '密码强度：强');
+                e.parents('.control-group').addClass('success');
+            }
+        }
+    });
+
     var oldKey = null;
     $('#key').change(function() {
         var e = $(this);
@@ -130,7 +163,7 @@ options.onReady.addListener(function() {
         if (oldKey != value) {
             e.removeClass('last default');
             e.parents('.control-group').removeClass('warning');
-            $("#no-maxlength").hideWithNotify();
+            $("#no-maxlength").hideAndNotify();
             oldKey = value;
         }
     });
@@ -157,7 +190,7 @@ options.onReady.addListener(function() {
     $('#scramble').change(onScrambleChange).keyup(onScrambleChange);
 
     $(document).on('click', '.alert .close', function() {
-        $(this).parent().hideWithNotify();
+        $(this).parent().hideAndNotify();
     });
 
     messages.page.sendToTop('iframeReady');
