@@ -15,16 +15,24 @@
 
         loadAll: function() {
             for (var name in cache) {
-                if (isUndefined(localStorage[name])) {
+                var value = localStorage.getItem(name);
+                if (value === null) {
                     options.global.set(name, cache[name]);
                 } else {
-                    cache[name] = JSON.parse(localStorage[name]);
+                    cache[name] = JSON.parse(value);
                 }
             }
         },
         set: function(name, value) {
             cache[name] = value;
-            localStorage[name] = JSON.stringify(value);
+            try {
+                localStorage.setItem(name, JSON.stringify(value));
+            } catch (e) {
+                if (e.name === 'QUOTA_EXCEEDED_ERR') {
+                    console.log(e);
+                    options.writeLocalStorageFailed = true;
+                }
+            }
         }
     };
 

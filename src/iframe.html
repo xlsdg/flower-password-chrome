@@ -23,12 +23,19 @@
 	<span id="close" title="关闭 (全局：Alt+W，本窗口内：Enter或Esc)">关闭</span>
 	<header><img id="title" src="img/title.png" /></header>
 	<fieldset class="form-horizontal">
-		<div class="control-group">
+		<div id="write-local-storage-failed" class="alert" style="display: none;">
+			<a class="close">&times;</a>
+			<div class="content">
+				<p>　您可能设置了“阻止网站设置任何数据”或“阻止第三方 Cookie 和网站数据”，这将导致花密无法保存设置。</p>
+				<p>　请您在Chrome设置中，打开“高级选项-&gt;内容设置-&gt;Cookie-&gt;管理例外情况”，添加“<script type="text/javascript">document.write(chrome.i18n.getMessage("@@extension_id"));</script>”，并将该项设置为“允许”。</p>
+			</div>
+		</div>
+		<div class="control-group first">
 			<label class="control-label" for="password">
 				<span class="help" title="选择一个与个人信息无关的密码，防止社会工程学破解">记忆密码</span>
 			</label>
 			<div class="controls"><input id="password" type="password" value="" placeholder="快捷键：Alt+S" /></div>
-			<div id="password-strength" class="alert" style="display: none;">
+			<div id="password-strength" class="alert with-arrow" style="display: none;">
 				<span class="arrow"></span>
 				<a class="close">&times;</a>
 				<div class="content">
@@ -42,7 +49,7 @@
 				<span class="help" title="用于区别不同用途密码的简短代号，如淘宝账号可用“taobao”或“tb”等">区分代号</span>
 			</label>
 			<div class="controls"><input id="key" type="text" value="" /></div>
-			<div id="no-maxlength" class="alert" style="display: none;">
+			<div id="no-maxlength" class="alert with-arrow" style="display: none;">
 				<span class="arrow"></span>
 				<a class="close">&times;</a>
 				<div class="content">

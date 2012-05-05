@@ -39,7 +39,7 @@ body {
   cursor: move;
 }
 
-.control-group:first-child {
+.control-group.first {
   margin-top: 12px;
 }
 
@@ -84,8 +84,12 @@ p, ul, li, #toolbar {
 
 .alert {
   position: relative;
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   padding: 8px;
+}
+
+.alert.with-arrow {
+  margin: 16px 0 0;
 }
 
 .alert .arrow {

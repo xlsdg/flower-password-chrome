@@ -6,16 +6,22 @@
     };
 
     function saveStorage(name, value) {
-        if (!isUndefined(value)) {
-            localStorage['flower-password-' + name] = JSON.stringify(value);
-        } else {
-            delete localStorage['flower-password-' + name];
+        var key = 'flower-password-' + name;
+        try {
+            if (!isUndefined(value)) {
+                localStorage.setItem(key, JSON.stringify(value));
+            } else {
+                localStorage.removeItem(key);
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
     function loadStorage(name) {
-        var value = localStorage['flower-password-' + name];
-        if (!isUndefined(value)) value = JSON.parse(value);
+        var key = 'flower-password-' + name;
+        var value = localStorage.getItem(key);
+        if (value !== null) value = JSON.parse(value);
         return value;
     }
 
@@ -25,7 +31,7 @@
         loadAll: function() {
             for (var name in cache) {
                 var value = loadStorage(name);
-                if (isUndefined(value)) {
+                if (value === null) {
                     if (!isUndefined(cache[name])) {
                         saveStorage(name, cache[name]);
                     }

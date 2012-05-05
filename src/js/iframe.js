@@ -66,6 +66,10 @@ function setupScrambleField() {
 };
 
 options.onReady.addListener(function() {
+    if (options.writeLocalStorageFailed) {
+        $('#write-local-storage-failed').show();
+    }
+
     if (options.isTransparent()) {
         $('#main').focusin(function() {
             messages.page.sendToTop('focusinIframe');
