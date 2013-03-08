@@ -3,18 +3,22 @@ var messages = {};
 (function() {
     messages.extension = {
         send: function(action, data) {
-            chrome.extension.sendRequest($.extend({action: action}, data), function(response) {
-                var handler = messages.extension.handlers[response.action];
-                if (handler) {
-                    handler(response);
+            chrome.extension.sendMessage($.extend({action: action}, data), function(response) {
+                if (response) {
+                    var handler = messages.extension.handlers[response.action];
+                    if (handler) {
+                        handler(response);
+                    }
                 }
             });
         },
         sendTo: function(tab, action, data) {
-            chrome.tabs.sendRequest(tab, $.extend({action: action}, data), function(response) {
-                var handler = messages.extension.handlers[response.action];
-                if (handler) {
-                    handler(response, function(){}, {tab: {id: tab}});
+            chrome.tabs.sendMessage(tab, $.extend({action: action}, data), function(response) {
+                if (response) {
+                    var handler = messages.extension.handlers[response.action];
+                    if (handler) {
+                        handler(response, function(){}, {tab: {id: tab}});
+                    }
                 }
             });
         },
@@ -23,7 +27,7 @@ var messages = {};
 
     messages.page = {
         broadcast: function(action, data) {
-            chrome.extension.sendRequest($.extend({action: action, transit: true}, data));
+            chrome.extension.sendMessage($.extend({action: action, transit: true}, data), function(){});
         },
         sendTo: function(target, action, data) {
             target.postMessage($.extend({action: action, flowerPassword: true}, data), '*');
@@ -32,10 +36,12 @@ var messages = {};
             if (window.top) {
                 messages.page.sendTo(window.top, action, data);
             } else {
-                chrome.extension.sendRequest($.extend({action: action, transit: true}, data), function(response) {
-                    var handler = messages.page.handlers[response.action];
-                    if (handler) {
-                        handler(response);
+                chrome.extension.sendMessage($.extend({action: action, transit: true}, data), function(response) {
+                    if (response) {
+                        var handler = messages.page.handlers[response.action];
+                        if (handler) {
+                            handler(response);
+                        }
                     }
                 });
             }
@@ -50,7 +56,7 @@ var messages = {};
         }
     };
 
-    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         var handler = null;
         if (request.transit) {
             handler = messages.page.handlers[request.action];
@@ -74,7 +80,7 @@ var messages = {};
         if (typeof data === 'object' && data.flowerPassword) {
             var handler = messages.page.handlers[data.action];
             if (handler) {
-                handler(data);
+                handler(data, function(){});
             }
         }
     });

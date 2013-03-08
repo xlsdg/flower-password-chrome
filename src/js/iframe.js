@@ -66,7 +66,8 @@ function setupScrambleField() {
 };
 
 options.onReady.addListener(function() {
-    if (options.writeLocalStorageFailed) {
+    if (options.accessLocalStorageFailed) {
+        $('.extension-id').html(chrome.i18n.getMessage("@@extension_id"));
         $('#write-local-storage-failed').show();
     }
 

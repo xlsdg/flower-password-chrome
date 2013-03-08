@@ -64,14 +64,15 @@ function attachListeners() {
             document.execCommand('copy');
         }
     });
-    chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    chrome.extension.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.transit) {
-            chrome.tabs.sendRequest(sender.tab.id, request, function(response) {
+            chrome.tabs.sendMessage(sender.tab.id, request, function(response) {
                 if (sendResponse) {
                     sendResponse(response);
                     sendResponse = null;
                 }
             });
+            return true;
         }
     });
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {

@@ -14,13 +14,18 @@
         cache: cache,
 
         loadAll: function() {
-            for (var name in cache) {
-                var value = localStorage.getItem(name);
-                if (value === null) {
-                    options.global.set(name, cache[name]);
-                } else {
-                    cache[name] = JSON.parse(value);
+            try {
+                for (var name in cache) {
+                    var value = localStorage.getItem(name);
+                    if (value === null) {
+                        options.global.set(name, cache[name]);
+                    } else {
+                        cache[name] = JSON.parse(value);
+                    }
                 }
+            } catch (e) {
+                console.log(e);
+                options.accessLocalStorageFailed = true;
             }
         },
         set: function(name, value) {
@@ -28,10 +33,8 @@
             try {
                 localStorage.setItem(name, JSON.stringify(value));
             } catch (e) {
-                if (e.name === 'QUOTA_EXCEEDED_ERR') {
-                    console.log(e);
-                    options.writeLocalStorageFailed = true;
-                }
+                console.log(e);
+                options.accessLocalStorageFailed = true;
             }
         }
     };
